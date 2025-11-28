@@ -1,0 +1,162 @@
+body {
+    font-family: 'Poppins', sans-serif; /* Terapkan font Poppins secara global */
+}
+.sentiment-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    color: white;
+}
+.cb{font-size:1000px }
+
+.positive-card {
+    background-color: rgb(76, 175, 80); /* Warna hijau */
+}
+
+.negative-card {
+    background-color: rgb(244, 67, 54); /* Warna merah */
+}
+
+.sentiment-icon {
+    font-size: 2.5rem;
+    margin-right: 15px;
+}
+
+.sentiment-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-count {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.tabelsen h4 {
+    margin-top: 20px;
+}
+
+.table {
+    border-collapse: collapse; 
+    width: 100%; 
+}
+
+.table th, .table td {
+    border: 1px solid #ddd; 
+    padding: 8px; 
+}
+
+.table th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9; 
+}
+
+.table-bordered {
+    border: 1px solid #ddd; 
+}
+
+.tabelsen h4 {
+    margin-top: 20px;
+}
+
+.table {
+    border-collapse: collapse; 
+    width: 100%; 
+}
+
+.table th, .table td {
+    border: 1px solid #ddd; 
+    padding: 8px; 
+}
+
+.table th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9; 
+}
+
+.table-bordered {
+    border: 1px solid #ddd; 
+}
+@media (max-width: 360px) {
+    .sentiment-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .sentiment-icon {
+        font-size: 1.8rem;
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+    }
+
+    .card-count {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .sentiment-card {
+        flex-direction: column; /* Atur elemen vertikal untuk layar kecil */
+        text-align: center;
+    }
+
+    .sentiment-icon {
+        font-size: 2rem;
+        margin: 0 0 10px 0;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-count {
+        font-size: 1.5rem;
+    }
+
+    .cb {
+        font-size: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sentiment-card {
+        padding: 15px;
+    }
+
+    .sentiment-icon {
+        font-size: 2.2rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-count {
+        font-size: 1.8rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .sentiment-card {
+        max-width: 80%; 
+        margin: 10px auto; 
+    }
+}

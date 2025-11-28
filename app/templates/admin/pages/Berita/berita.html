@@ -1,0 +1,296 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/databerita.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+
+<div class="berita-container">
+    <div class="berita-title">
+        <i class="uil uil-newspaper"></i>
+        <span>Kelola Data Berita</span>
+    </div>
+
+    <!-- Statistik -->
+    <div class="overview mb-4">
+        <div class="boxes">
+            <div class="box box1">
+                <i class="uil uil-share"></i>
+                <span class="text">Total Berita</span>
+                <span class="number">{{ total_berita }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tombol Tambah -->
+    <div class="berita-button-container">
+        <button class="berita-add-btn" data-toggle="modal" data-target="#modalTambahBerita">
+            Tambah
+        </button>
+    </div>
+
+    <!-- Tabel Data -->
+    <div class="table-responsive">
+        <table id="beritaTable" class="table table-berita" data-toggle="table" data-search="true"
+            data-show-columns="true" data-show-refresh="true" data-pagination="true"
+            data-page-list="[5, 10, 20, 50, 100]" data-show-export="true" 
+            data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-berita"}' data-pagination-pre-text="‹"
+            data-pagination-next-text="›">
+            <thead class="thead-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Gambar</th>
+                    <th>Judul</th>
+                    <th>Tanggal</th>
+                    <th>Konten</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in news %}
+                <tr data-id="{{ item.id }}" data-judul="{{ item.judul }}" data-tanggal="{{ item.tanggal }}"
+                    data-konten="{{ item.konten|safe }}" data-gambar="{{ item.gambar }}">
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        {% if item.gambar %}
+                        <img src="{{ url_for('static', filename='gambarUser/' + item.gambar) }}" 
+                             alt="{{ item.judul }}" class="table-img">
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.judul }}</td>
+                    <td>{{ item.tanggal }}</td>
+                    <td>{{ item.konten|safe|truncate(100, True, '...') }}</td>
+                    <td>
+                        <div class="berita-action-buttons">
+                            <button class="berita-btn-circle edit" data-toggle="modal" data-target="#modalEditBerita">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <form action="{{ url_for('delete_berita', berita_id=item.id) }}" method="POST"
+                                class="d-inline delete-form">
+                                <button type="button" class="berita-btn-circle delete delete-btn-confirm">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 🟢 MODAL TAMBAH BERITA -->
+<div class="modal fade" id="modalTambahBerita" tabindex="-1" aria-labelledby="tambahLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahLabel">Tambah Berita</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formTambahBerita" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="image" id="previewTambahImage" class="form-control" accept="image/*">
+                        <div id="previewTambahContainer" class="mt-2 text-center"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Konten</label>
+                        <textarea name="content" rows="6" class="form-control" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🟡 MODAL EDIT BERITA -->
+<div class="modal fade" id="modalEditBerita" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLabel">Edit Berita</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditBerita" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="editId">
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="title" id="editTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" name="date" id="editDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar Baru (opsional)</label>
+                        <input type="file" name="image" id="previewEditImage" class="form-control" accept="image/*">
+                        <div id="previewEditContainer" class="mt-2 text-center"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Konten</label>
+                        <textarea name="content" id="editContent" rows="6" class="form-control" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+    // 🖼️ Preview Gambar Tambah
+    $('#previewTambahImage').on('change', function () {
+        const file = this.files[0];
+        const preview = $('#previewTambahContainer');
+        preview.html('');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.html(`<img src="${e.target.result}" class="img-thumbnail" style="max-height:150px;">`);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 🖼️ Preview Gambar Edit
+    $('#previewEditImage').on('change', function () {
+        const file = this.files[0];
+        const preview = $('#previewEditContainer');
+        preview.html('');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.html(`<img src="${e.target.result}" class="img-thumbnail" style="max-height:150px;">`);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 🟢 Tambah Berita
+    $('#formTambahBerita').on('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        $.ajax({
+            url: "{{ url_for('create_berita') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                $('#modalTambahBerita').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Berita berhasil ditambahkan.',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                setTimeout(() => location.reload(), 2000);
+            },
+            error: function () {
+                Swal.fire('Gagal!', 'Terjadi kesalahan saat menambah berita.', 'error');
+            }
+        });
+    });
+
+    // 🟡 Buka Modal Edit
+    $(document).on('click', '.edit', function () {
+        const row = $(this).closest('tr');
+        $('#editId').val(row.data('id'));
+        $('#editTitle').val(row.data('judul'));
+        $('#editDate').val(row.data('tanggal'));
+        $('#editContent').val($('<div>').html(row.data('konten')).text().trim());
+        const gambar = row.data('gambar');
+        const previewContainer = $('#previewEditContainer');
+        previewContainer.html(gambar ? `<img src="/static/gambarUser/${gambar}" class="img-thumbnail" style="max-height:150px;">`
+                                     : `<p class="text-muted">Tidak ada gambar</p>`);
+    });
+
+    // 🟢 Update Berita
+    $('#formEditBerita').on('submit', function (e) {
+        e.preventDefault();
+        const id = $('#editId').val();
+        const formData = new FormData(this);
+        $.ajax({
+            url: `/admin/berita/update/${id}`,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                $('#modalEditBerita').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Data berita diperbarui.',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                setTimeout(() => location.reload(), 2000);
+            },
+            error: function () {
+                Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui data.', 'error');
+            }
+        });
+    });
+
+    // 🔴 Hapus Berita
+    $(document).on('click', '.delete-btn-confirm', function (e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        const url = form.attr('action');
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: 'Data ini tidak dapat dikembalikan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then(res => {
+            if (res.isConfirmed) {
+                $.post(url)
+                    .done(() => Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil dihapus.',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => location.reload()))
+                    .fail(() => Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus.', 'error'));
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/profilbksda.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="profile-bksda-container">
+    <div class="profile-bksda-title">
+        <i class="uil uil-building"></i>
+        <span>Kelola Profil BKSDA</span>
+    </div>
+
+    <!-- Tombol Tambah -->
+    <div class="profile-bksda-button-container mb-3">
+        {% if not data %}
+        <p class="text-muted">Belum ada profil BKSDA.</p>
+        <button class="profile-bksda-add-btn" data-toggle="modal" data-target="#createModal">
+            <i class="fa fa-plus"></i> Tambah Profil
+        </button>
+        {% endif %}
+    </div>
+
+    {% if data %}
+    <!-- Card Profil -->
+    <div class="profile-card">
+        <div class="profile-card-header">
+            {% if data.gambar %}
+            <img src="{{ url_for('static', filename='gambarUser/' + data.gambar) }}" class="profile-card-img">
+            {% else %}
+            <div class="profile-card-img placeholder">
+                <i class="fa fa-building fa-3x"></i>
+            </div>
+            {% endif %}
+            <div class="profile-card-info">
+                <h4>{{ data.judul }}</h4>
+                <p><strong>Kepala Balai:</strong> {{ data.kepala_balai or '-' }}</p>
+                <p><strong>Telepon:</strong> {{ data.telepon or '-' }} | <strong>Email:</strong> {{ data.email or '-' }}
+                </p>
+                <p><strong>Website:</strong> {{ data.website or '-' }}</p>
+                <p><strong>Alamat:</strong> {{ data.alamat }}</p>
+            </div>
+            <div class="profile-card-actions">
+                <button class="profile-bksda-btn-circle edit" data-toggle="modal" data-target="#editModal{{ data.id }}">
+                    <i class="fa fa-edit"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Collapsible Info -->
+        <div class="profile-card-body">
+            <div class="accordion" id="profileAccordion">
+                <div class="card">
+                    <div class="card-header" id="headingDeskripsi">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse"
+                                data-target="#collapseDeskripsi">
+                                Deskripsi
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseDeskripsi" class="collapse" data-parent="#profileAccordion">
+                        <div class="card-body">{{ data.deskripsi }}</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingVisi">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseVisi">
+                                Visi
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseVisi" class="collapse" data-parent="#profileAccordion">
+                        <div class="card-body">{{ data.visi or '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingMisi">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMisi">
+                                Misi
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseMisi" class="collapse" data-parent="#profileAccordion">
+                        <div class="card-body">{{ data.misi or '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingJam">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseJam">
+                                Jam Operasional
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseJam" class="collapse" data-parent="#profileAccordion">
+                        <div class="card-body">{{ data.jam_operasional or '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingInfo">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseInfo">
+                                Informasi
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseInfo" class="collapse" data-parent="#profileAccordion">
+                        <div class="card-body">{{ data.informasi or '-' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal Create Profil (tidak berubah) -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Profil BKSDA</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('create_bksda') }}" method="POST" enctype="multipart/form-data">
+                    <!-- form fields sama seperti sebelumnya -->
+                    <!-- Judul, Deskripsi, Alamat, Telepon, Email, Website, Kepala Balai, Visi, Misi, Jam Operasional, Informasi, Gambar -->
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="judul" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <textarea name="alamat" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Telepon</label>
+                        <input type="text" name="telepon" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Website</label>
+                        <input type="text" name="website" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Kepala Balai</label>
+                        <input type="text" name="kepala_balai" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Visi</label>
+                        <textarea name="visi" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Misi</label>
+                        <textarea name="misi" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Jam Operasional</label>
+                        <textarea name="jam_operasional" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Informasi</label>
+                        <textarea name="informasi" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="gambar" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Profil -->
+{% if data %}
+<div class="modal fade" id="editModal{{ data.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profil BKSDA</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('update_bksda', id=data.id) }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="judul" class="form-control" value="{{ data.judul }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi" class="form-control" rows="2"
+                            required>{{ data.deskripsi }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <textarea name="alamat" class="form-control" rows="2" required>{{ data.alamat }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Telepon</label>
+                        <input type="text" name="telepon" class="form-control" value="{{ data.telepon }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ data.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Website</label>
+                        <input type="text" name="website" class="form-control" value="{{ data.website }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Kepala Balai</label>
+                        <input type="text" name="kepala_balai" class="form-control" value="{{ data.kepala_balai }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Visi</label>
+                        <textarea name="visi" class="form-control" rows="2">{{ data.visi }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Misi</label>
+                        <textarea name="misi" class="form-control" rows="2">{{ data.misi }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Jam Operasional</label>
+                        <textarea name="jam_operasional" class="form-control"
+                            rows="2">{{ data.jam_operasional }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Informasi</label>
+                        <textarea name="informasi" class="form-control" rows="2">{{ data.informasi }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="gambar" class="form-control">
+                        {% if data.gambar %}
+                        <img src="{{ url_for('static', filename='gambarUser/' + data.gambar) }}"
+                            class="table-img-profile-bksda mt-2">
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

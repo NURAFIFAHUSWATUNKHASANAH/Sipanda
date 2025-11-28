@@ -1,0 +1,193 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/dataabout.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="dataabout-container">
+    <div class="dataabout-title">
+        <i class="uil uil-info-circle"></i>
+        <span>Kelola Halaman About</span>
+    </div>
+
+    <!-- Tombol Tambah -->
+    <div class="dataabout-button-container mb-3">
+        {% if not about.id %}
+        <button class="dataabout-add-btn" data-toggle="modal" data-target="#createModal">
+            <i class="fa fa-plus"></i> Tambah Data About
+        </button>
+        {% endif %}
+    </div>
+
+    {% if about %}
+    <!-- Card About -->
+    <div class="dataabout-card">
+        <div class="dataabout-card-header">
+            {% if about.image %}
+            <img src="{{ url_for('static', filename='gambarUser/' + about.image) }}" class="dataabout-card-img">
+            {% else %}
+            <div class="dataabout-card-img placeholder">
+                <i class="fa fa-image fa-3x"></i>
+            </div>
+            {% endif %}
+            <div class="dataabout-card-info">
+                <h4>{{ about.title }}</h4>
+                <p>{{ about.description }}</p>
+            </div>
+            <div class="dataabout-card-actions">
+                <button class="dataabout-btn-circle edit" data-toggle="modal" data-target="#editModal{{ about.id }}">
+                    <i class="fa fa-edit"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal Tambah Data About -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data About</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createForm" action="{{ url_for('about_admin') }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="title" class="form-control" placeholder="Masukkan judul" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi (maks. 50 kata)</label>
+                        <textarea id="descriptionAdd" name="description" class="form-control" rows="4"
+                            placeholder="Masukkan deskripsi" required></textarea>
+                        <small id="wordCountAdd" style="color:gray;">0 / 50 kata</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Data About -->
+{% if about %}
+<div class="modal fade" id="editModal{{ about.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data About</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" action="{{ url_for('about_admin') }}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="{{ about.id }}">
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="title" class="form-control" value="{{ about.title }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi (maks. 50 kata)</label>
+                        <textarea id="descriptionEdit" name="description" class="form-control" rows="4"
+                            required>{{ about.description }}</textarea>
+                        <small id="wordCountEdit" style="color:gray;">0 / 50 kata</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                        {% if about.image %}
+                        <img src="{{ url_for('static', filename='gambarUser/' + about.image) }}"
+                            class="table-img-dataabout mt-2">
+                        {% endif %}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    // ======== AJAX simpan tambah dan edit ========
+    $(document).ready(function () {
+        $('#createForm, #editForm').on('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var form = $(this);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data About berhasil disimpan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan saat menyimpan data.'
+                    });
+                }
+            });
+        });
+    });
+
+    // ======== Hitung kata dinamis ========
+    function setupWordCounter(textareaId, counterId) {
+        const textarea = document.getElementById(textareaId);
+        const counter = document.getElementById(counterId);
+        if (!textarea) return;
+
+        textarea.addEventListener("input", function () {
+            let text = this.value.trim();
+            let words = text.length > 0 ? text.split(/\s+/).length : 0;
+            counter.innerText = words + " / 50 kata";
+
+            if (words > 50) {
+                this.value = text.split(/\s+/).slice(0, 50).join(" ");
+                counter.innerText = "50 / 50 kata (maksimal)";
+                Swal.fire({
+                    icon: "warning",
+                    title: "Batas 50 kata tercapai!",
+                    text: "Deskripsi tidak boleh lebih dari 50 kata.",
+                    confirmButtonColor: "#014224"
+                });
+            }
+        });
+    }
+
+    setupWordCounter("descriptionAdd", "wordCountAdd");
+    setupWordCounter("descriptionEdit", "wordCountEdit");
+</script>
+
+{% endblock %}

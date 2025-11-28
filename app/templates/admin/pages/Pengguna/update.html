@@ -1,0 +1,64 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+
+<div class="overview">
+    <div class="title">
+        <i class="uil uil-user"></i>
+        <span class="text">Edit Data Pengguna</span>
+    </div>
+</div>
+
+<div class="form-container">
+    <form action="{{ url_for('editDataPengguna', user_id=user.id) }}" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="nama">Nama</label>
+            <input type="text" id="nama" name="nama" class="form-control" value="{{ user.nama }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="no_telp">Nomor Telepon</label>
+            <input type="text" id="no_telp" name="no_telp" class="form-control" value="{{ user.no_telp }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="img_profil">Gambar Profil</label>
+            <input type="file" id="img_profil" name="img_profil" class="form-control">
+            {% if user.img_profil %}
+            <div class="current-image">
+                <p>Gambar saat ini:</p>
+                <img src="{{ url_for('static', filename='gambarUser/' + user.img_profil) }}" alt="{{ user.nama }}" style="max-width: 200px;">
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role" class="form-control" required>
+                <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                <option value="pihak_berwajib" {% if user.role == 'pihak_berwajib' %}selected{% endif %}>Pihak Berwajib</option>
+                <option value="super_admin" {% if user.role == 'super_admin' %}selected{% endif %}>Super Admin</option>
+            </select>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="add-data-btn">Simpan</button>
+            <a href="{{ url_for('pengguna') }}" class="btn btn-secondary">Batal</a>
+        </div>
+    </form>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="alert alert-{{ messages[0][0] }}">
+            {{ messages[0][1] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% endblock %}

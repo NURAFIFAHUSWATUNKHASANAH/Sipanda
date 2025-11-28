@@ -1,0 +1,56 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/status_laporan.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Status Laporan Saya</h2>
+
+    <div class="card shadow-sm p-3 mb-4">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pelapor</th>
+                        <th>Alamat</th>
+                        <th>Keterangan</th>
+                        <th>Status</th>
+                        <th>Update Terakhir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if laporan_data %}
+                        {% for laporan in laporan_data %}
+                        <tr>
+                            <td>{{ loop.index }}</td> <!-- Nomor urut mulai dari 1 -->
+                            <td>{{ laporan.nama_lapor }}</td>
+                            <td>{{ laporan.alamat }}</td>
+                            <td>{{ laporan.keterangan }}</td>
+                            <td>
+                                {% if laporan.status == "verifikasi" %}
+                                    <span class="badge bg-warning text-dark">Verifikasi</span>
+                                {% elif laporan.status == "sedang_di_proses" %}
+                                    <span class="badge bg-primary">Sedang Diproses</span>
+                                {% elif laporan.status == "selesai_di_proses" %}
+                                    <span class="badge bg-success">Selesai Diproses</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Tidak Valid</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ laporan.updated_at.strftime('%d-%m-%Y %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4">Belum ada laporan yang Anda ajukan.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

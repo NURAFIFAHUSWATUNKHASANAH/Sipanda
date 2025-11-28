@@ -1,0 +1,45 @@
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>{{ footer.title }}</h3>
+            <p>{{ footer.description }}</p>
+            <div class="social-icons">
+                <a href="{{ footer.instagram_link }}"><img src="/static/img/Instagram.png" alt=""></a>
+                <a href="{{ footer.twitter_link }}"><img src="/static/img/Vector.png" alt=""></a>
+                <a href="{{ footer.facebook_link }}"><img src="/static/img/Vector (1).png" alt=""></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+                {% for link in footer.company_links.split(',') %}
+                <li><a href="#">{{ link }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Links</h3>
+            <ul>
+                {% for link in footer.feature_links.split(',') %}
+                <li><a href="#">{{ link }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <ul>
+                <li><a href="tel:+{{ footer.phone }}">{{ footer.phone }}</a></li>
+                <li><a href="mailto:{{ footer.email }}">{{ footer.email }}</a></li>
+                <li><a href="#">{{ footer.address }}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="back-to-top">
+        <a href="#">&#9650;</a>
+    </div>
+
+    <div class="footer-bottom">
+        <p>{{ footer.copyright_text }}</p>
+    </div>
+</footer>

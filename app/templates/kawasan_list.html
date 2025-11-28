@@ -1,0 +1,117 @@
+{% extends "layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dataBalai.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="content-datakawasan">
+    <h1 class="judl">Data Kawasan Konservasi</h1>
+    <p class="para">Kumpulan informasi kawasan konservasi di Indonesia</p>
+
+    <div class="content-kanan">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari Kawasan">
+            <button id="searchButton" class="search-button">Cari</button>
+            <!-- <button id="resetButton">Kembali</button> -->
+        </div>
+    </div>
+
+    <div id="loader">Memuat data...</div>
+
+    <div class="bagianCard" id="cardContainer">
+        {% for kawasan in data %}
+        <div class="cardData">
+            <div class="imgCardD">
+                {% if kawasan.foto %}
+                <img src="{{ url_for('static', filename='gambarKawasan/' + kawasan.foto) }}" alt="{{ kawasan.nama }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='gambarKawasan/default.jpg') }}" alt="No Image">
+                {% endif %}
+            </div>
+            <h1 title="{{ kawasan.nama }}">{{ kawasan.nama }}</h1>
+            <div class="btnCardD">
+                <a href="{{ url_for('detail_kawasan', id=kawasan.id) }}">Detail</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const resetButton = document.getElementById('resetButton');
+    const loader = document.getElementById('loader');
+    const cardContainer = document.getElementById('cardContainer');
+
+    function loadAllData() {
+        loader.style.display = 'block';
+        cardContainer.innerHTML = '';
+
+        fetch('/api/pencarian/kawasan')
+            .then(res => res.json())
+            .then(data => {
+                loader.style.display = 'none';
+                data.forEach(kawasan => {
+                    const card = `
+                    <div class="cardData">
+                        <div class="imgCardD">
+                            <img src="/static/gambarKawasan/${kawasan.foto || 'default.jpg'}" alt="${kawasan.nama}">
+                        </div>
+                        <h1 title="${kawasan.nama}">${kawasan.nama}</h1>
+                        <div class="btnCardD">
+                            <a href="/kawasan/${kawasan.id}">Detail</a>
+                        </div>
+                    </div>`;
+                    cardContainer.innerHTML += card;
+                });
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                cardContainer.innerHTML = '<p>Terjadi kesalahan saat memuat data.</p>';
+            });
+    }
+
+    searchButton.addEventListener('click', () => {
+        const query = searchInput.value;
+        loader.style.display = 'block';
+        cardContainer.innerHTML = '';
+
+        fetch(`/api/pencarian/kawasan?search=${query}`)
+            .then(res => res.json())
+            .then(data => {
+                loader.style.display = 'none';
+                if (data.length === 0) {
+                    cardContainer.innerHTML = '<p>Tidak ada data ditemukan.</p>';
+                    return;
+                }
+                data.forEach(kawasan => {
+                    const card = `
+                    <div class="cardData">
+                        <div class="imgCardD">
+                            <img src="/static/gambarKawasan/${kawasan.foto || 'default.jpg'}" alt="${kawasan.nama}">
+                        </div>
+                        <h1 title="${kawasan.nama}">${kawasan.nama}</h1>
+                        <div class="btnCardD">
+                            <a href="/kawasan/${kawasan.id}">Detail</a>
+                        </div>
+                    </div>`;
+                    cardContainer.innerHTML += card;
+                });
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                cardContainer.innerHTML = '<p>Terjadi kesalahan saat memuat data.</p>';
+            });
+    });
+
+    resetButton.addEventListener('click', () => {
+        window.location.href = '/';
+    });
+
+    document.addEventListener('DOMContentLoaded', loadAllData);
+</script>
+{% endblock %}

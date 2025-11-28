@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+    --warna-hijau: #014224;
+    --warna-hijau-hover: #007a41;
+    --warna-merah: #c9302c;
+    --warna-bg: #ffffff;
+    --warna-card: #f9f9f9;
+    --warna-text: #222;
+    --warna-border: #ddd;
+
+    /* DARK MODE */
+    --warna-bg-dark: #1e1f20;
+    --warna-card-dark: #2b2b2b;
+    --warna-text-dark: #e1e1e1;
+    --warna-border-dark: #3d3d3d;
+        --warna-simpan-dataabout-dark: #979797;
+    --warna-hapus-dataabout-dark: #5d5d5d;
+        --warna-hover-hapus-dataabout-dark: #3A3B3C;
+            --warna-hover-simpan-dataabout-dark: #7b7f83;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--warna-bg);
+    color: var(--warna-text);
+}
+
+body.dark {
+    background: var(--warna-bg-dark);
+    color: var(--warna-text-dark);
+}
+
+/* ===== Layout Utama ===== */
+.datafooter-container {
+    background: #ffffff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.527);
+    font-size: 14px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+body.dark .datafooter-container {
+    background: var(--warna-bg-dark);
+    color: var(--warna-text-dark);
+}
+
+.datafooter-container:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== Header ===== */
+.footer-header {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--warna-hijau);
+}
+
+body.dark .footer-header {
+    color: var(--warna-text-dark);
+}
+
+.footer-header i {
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+/* ===== Card ===== */
+.footer-card {
+    background: var(--warna-card);
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid var(--warna-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.3s ease;
+}
+
+body.dark .footer-card {
+    background: var(--warna-card-dark);
+    border-color: var(--warna-border-dark);
+}
+
+/* ===== Card Header ===== */
+.footer-card-header {
+    border-bottom: 1px solid var(--warna-border);
+    margin-bottom: 20px;
+}
+
+.footer-card-header h6 {
+    color: var(--warna-hijau);
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.footer-card-header p {
+    font-size: 14px;
+    color: #555;
+}
+
+body.dark .footer-card-header h6 {
+    color: var(--warna-text-dark);
+}
+
+body.dark .footer-card-header p {
+    color: #ccc;
+}
+
+/* ===== Form ===== */
+.footer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px 24px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--warna-hijau);
+}
+
+body.dark .form-group label {
+    color: var(--warna-text-dark);
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid var(--warna-border);
+    padding: 10px 12px;
+    background: var(--warna-bg);
+    transition: 0.3s ease;
+}
+
+body.dark .form-control {
+    background: var(--warna-card-dark);
+    color: var(--warna-text-dark);
+    border-color: var(--warna-border-dark);
+}
+
+/* ===== Tombol ===== */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-success {
+    background-color: var(--warna-hijau);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.btn-success:hover {
+    background-color: var(--warna-hijau-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--warna-merah);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background-color: #b52d2d;
+    transform: translateY(-2px);
+}
+
+/* Tombol SIMPAN ikut gelap */
+body.dark .btn-success {
+    background-color: var(--warna-simpan-dataabout-dark);
+    color: #fff !important;
+    border: none !important;
+}
+
+body.dark .btn-success:hover {
+    background-color: var(--warna-hover-simpan-dataabout-dark);
+}
+
+/* Tombol BATAL ikut gelap */
+body.dark .btn-secondary {
+    background-color: var(--warna-hapus-dataabout-dark);
+    color: #fff !important;
+    border: none !important;
+}
+
+body.dark .btn-secondary:hover {
+    background-color: #999 !important;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

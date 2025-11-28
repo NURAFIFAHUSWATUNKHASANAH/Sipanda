@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balai Konservasi Terdekat</title>
+    <style>
+        .cardData {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: inline-block;
+        }
+        .imgCardD img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .btnCardD a {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 8px 16px;
+            margin-top: 8px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .btnCardD a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Balai Konservasi Terdekat</h1>
+    <button onclick="findNearby()">Cari Balai Terdekat</button>
+
+    <div id="balaiCards"></div>
+
+    <script>
+        function findNearby() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const { latitude, longitude } = position.coords;
+
+                    // Panggil endpoint Flask
+                    fetch(`/cobabalai?latitude=${latitude}&longitude=${longitude}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const balaiCards = document.getElementById('balaiCards');
+                            balaiCards.innerHTML = '';  // Clear previous results
+
+                            // Loop dan tampilkan data balai dalam kartu
+                            data.forEach(balai => {
+                                const card = document.createElement('div');
+                                card.className = 'cardData';
+
+                                card.innerHTML = `
+                                    <div class="imgCardD">
+                                        <img src="{{ url_for('static', filename='gambarUser/') }}${balai.gambarbalai}" alt="${balai.nama_balai}">
+                                    </div>
+                                    <h1 title="${balai.nama_balai}">${balai.nama_balai}</h1>
+                                    <p>Alamat: ${balai.alamat}</p>
+                                    <p>Kontak: ${balai.kontak}</p>
+                                    <p>Jarak: ${balai.distance.toFixed(2)} km</p>
+                                    <div class="btnCardD">
+                                        <a href="#">Lihat</a>
+                                    </div>
+                                `;
+
+                                balaiCards.appendChild(card);
+                            });
+                        })
+                        .catch(err => alert("Error fetching data: " + err));
+                });
+            } else {
+                alert("Geolocation tidak didukung oleh browser Anda.");
+            }
+        }
+    </script>
+</body>
+</html>

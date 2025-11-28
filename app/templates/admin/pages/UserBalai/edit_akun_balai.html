@@ -1,0 +1,50 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<div class="overview">
+    <div class="title">
+        <i class="uil uil-edit"></i>
+        <span class="text">Edit Akun Balai Konservasi</span>
+    </div>
+
+    <div class="activity">
+        <form class="activity-form" enctype="multipart/form-data" method="POST" action="{{ url_for('edit_balai', id=balai.id) }}">
+            <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" id="nama" name="nama" value="{{ balai.nama }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ balai.email }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="no_telp">No. Telepon</label>
+                <input type="text" id="no_telp" name="no_telp" value="{{ balai.no_telp }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <textarea id="alamat" name="alamat" required>{{ balai.alamat }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="kabupaten">Kabupaten</label>
+                <input type="text" id="kabupaten" name="kabupaten" value="{{ balai.kabupaten }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="provinsi">Provinsi</label>
+                <input type="text" id="provinsi" name="provinsi" value="{{ balai.provinsi }}" required>
+            </div>
+        
+            
+            <div class="form-group actions">
+                <button type="submit" class="save-btn">Simpan Perubahan</button>
+                <button type="reset" class="cancel-btn">Batal</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

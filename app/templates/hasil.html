@@ -1,0 +1,79 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/hasil.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="card-container">
+    <!-- Konten utama -->
+    <div class="card-content">
+        <!-- Kolom Gambar -->
+        <div class="card-image">
+            <img src=" {{ url_for('static', filename='uploads/' + file_url) }}" alt="Hasil Gambar">
+        </div>
+        <!-- Kolom Detail -->
+        <div class="result">
+            <h2 class="species-name">{{ result['predicted_label'] }}</h2>
+
+            {% if result['species_info'] %}
+            <p class="latin-name"><em>{{ result['species_info']['latin_name'] }}</em></p>
+
+            <div class="divider"></div>
+
+            <div class="info">
+                <div class="info-item">
+                    <span class="label">Status:</span>
+                    <span class="value status 
+                        {% if result['species_info']['status'] == 'DILINDUNGI' %}
+                            protected
+                        {% else %}
+                            not-protected
+                        {% endif %}
+                    ">
+                        {{ result['species_info']['status'] }}
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Habitat:</span>
+                    <span class="value">{{ result['species_info']['habitat'] }}</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Deskripsi:</span>
+                    <p class="description">{{ result['species_info']['description'] }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Tombol Aksi -->
+    <div class="card-actions">
+        <div class="btn-container">
+            <a href="{{ url_for('halamanScan') }}" class="btn">Unggah Gambar Lain</a>
+
+            {% if result['species_info']['status'] == 'DILINDUNGI' %}
+            <form method="GET" action="{{ url_for('lapor') }}">
+                <input type="hidden" name="file_url" value="{{ file_url }}">
+                <input type="hidden" name="filename" value="{{ file_url }}">
+                <input type="hidden" name="result" value="{{ result }}">
+                <button type="submit" class="btn-report" id="btn-lapor">
+                    Laporkan
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    document.getElementById('btn-lapor').addEventListener('click', function () {
+        if (!this.disabled) {
+            window.location.href = "{{ url_for('lapor') }}";
+        }
+    });
+</script>
+{% endblock %}

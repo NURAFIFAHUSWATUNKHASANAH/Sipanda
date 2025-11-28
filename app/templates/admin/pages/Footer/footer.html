@@ -1,0 +1,134 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/datafooter.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<div class="datafooter-container">
+    <div class="footer-page">
+        <div class="footer-header">
+            <i class="fa-solid fa-gear"></i>
+            <span>Kelola Footer</span>
+        </div>
+
+        <div class="footer-card">
+            <div class="footer-card-header">
+                <h6>Informasi Footer Website</h6>
+                <p>Perbarui informasi kontak, media sosial, dan tautan yang tampil di bagian bawah halaman website.</p>
+            </div>
+
+            <form id="footerForm" action="{{ url_for('footer_update') }}" method="POST" enctype="multipart/form-data"
+                class="footer-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="title" class="form-control"
+                            value="{{ footer.title if footer else 'Footer SIPANDA' }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>No. Telepon</label>
+                        <input type="text" name="phone" class="form-control"
+                            value="{{ footer.phone if footer else '+6281234567890' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="description" class="form-control"
+                            rows="3">{{ footer.description if footer else 'Sistem Informasi Hewan Dilindungi (SIPANDA)...' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control"
+                            value="{{ footer.email if footer else 'info@sipanda.id' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Instagram</label>
+                        <input type="text" name="instagram_link" class="form-control"
+                            value="{{ footer.instagram_link if footer else 'https://instagram.com/sipanda.id' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Twitter</label>
+                        <input type="text" name="twitter_link" class="form-control"
+                            value="{{ footer.twitter_link if footer else 'https://twitter.com/sipanda_id' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Facebook</label>
+                        <input type="text" name="facebook_link" class="form-control"
+                            value="{{ footer.facebook_link if footer else 'https://facebook.com/sipanda.id' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <input type="text" name="address" class="form-control"
+                            value="{{ footer.address if footer else 'Jl. Konservasi No. 10, Jakarta' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Links (pisahkan dengan koma)</label>
+                        <input type="text" name="company_links" class="form-control"
+                            value="{{ footer.company_links if footer else 'Tentang Kami,Karier,Kontak' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Feature Links (pisahkan dengan koma)</label>
+                        <input type="text" name="feature_links" class="form-control"
+                            value="{{ footer.feature_links if footer else 'Deteksi Hewan,Edukasi,Hubungi Kami' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Copyright</label>
+                        <input type="text" name="copyright_text" class="form-control"
+                            value="{{ footer.copyright_text if footer else '© 2025 SIPANDA. All rights reserved.' }}">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">
+                        Simpan</button>
+                    <button type="reset" class="btn btn-secondary">
+                        Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <script>
+        $(document).ready(function () {
+            $('#footerForm').on('submit', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data footer berhasil disimpan.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: 'Terjadi kesalahan saat menyimpan data.'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    {% endblock %}

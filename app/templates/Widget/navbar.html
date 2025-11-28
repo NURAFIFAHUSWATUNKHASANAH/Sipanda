@@ -1,0 +1,63 @@
+<nav>
+  <div class="bagianLogo">
+    <h1>SI<span>PANDA</span></h1>
+  </div>
+  <div id="menu-icon" class="menu-icon">
+    <i class='bx bx-menu' undefined ></i>
+  </div>
+  <ul id="menu-list" class="hidden">
+    <li>
+      <a href="{{ url_for('home') }}">Home</a>
+    </li>
+    <li>
+      <a href="{{ url_for('home') }}#tentang">Tentang</a>
+    </li>
+    <li class="dropdownA">
+      <a href="#">Data</a>
+      <div class="dropdown-contentA" id="dataDropdownA">
+        <a href="{{url_for('halamanHewan')}}">Data Hewan</a>
+        <a href="{{url_for('dataHalaman')}}">Data Balai Konservasi</a>
+            <a href="{{ url_for('kawasan_public') }}">Data Kawasan</a>
+      </div>
+    </li>
+    <li>
+      <a href="{{ url_for('home') }}#fitur">Fitur</a>
+    </li>
+    
+    <li>
+      <a href="{{ url_for('home') }}#maps">Map</a>
+    </li>
+        <li>
+      <a href="{{ url_for('lapor') }}">Lapor</a>
+    </li>
+    <li>
+      <a href="{{url_for('halamanScan')}}">Scan</a>
+    </li>
+    {%if session.get('user_id') %}
+    
+    <!-- <li>
+      <a href="{{url_for('halamanChat')}}">Chatbot</a>
+    </li> -->
+    {% if session.get('role') in ['super_admin', 'pihak_berwajib'] %}
+    <li>
+      <a href="{{ url_for('admin') }}" class="btn">Admin</a>
+    </li>
+    {% endif %}
+    <li id="profileContainer">
+      <a href="#" class="btn" id="profileBtn">Profil</a>
+      <div id="profileDropdown">
+        <a href="{{ url_for('profil') }}">Lihat Profil</a>
+        <a href="{{ url_for('status_laporan') }}">Cek Laporan</a>
+        <a href="{{ url_for('logout') }}">Sign Out</a>
+      </div>
+    </li>
+    {%else%}
+    <li>
+      <a href="{{url_for('register')}}" class="btn" id="openDialog">Buat Akun</a>
+    </li>
+    <li>
+      <a href="{{url_for('login')}}" class="btn">Masuk</a>
+    </li>
+    {%endif%}
+  </ul>
+</nav>

@@ -1,0 +1,193 @@
+/* ======== GENERAL STYLING ======== */
+body {
+    background-color: #EEEEE4;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container agar form register tetap berada di tengah dan simetris */
+.container-fluid {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px; /* Agar form berada di bawah navbar */
+}
+
+/* ======== NAVBAR STYLING ======== */
+.custom-navbar {
+    width: 100%;
+    max-width: 100%;
+    /* margin: auto; */
+    border-radius: 0px;
+}
+
+/* Styling Tulisan SIPANDA */
+.logo-text {
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 0px;
+}
+
+.logo-text .si {
+    color: #004400;
+}
+
+.logo-text .panda {
+    color: brown;
+}
+
+/* ======== FORM STYLING (LOGIN & REGISTER) ======== */
+.auth-container {
+    background-color: #EEEEE4;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    width: 100%;
+    max-width: 800px; /* Ukuran form diperlebar */
+    margin-right: 30px;
+}
+
+/* Judul */
+h1 {
+    font-weight: 700;
+    color: #004400;
+    margin-bottom: 15px;
+}
+
+/* Subjudul */
+p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Input form */
+.form-control {
+    height: 50px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    padding: 10px;
+}
+
+/* Tombol submit */
+.btn-success {
+    background-color: #004400;
+    border: none;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.btn-success:hover {
+    background-color: #003300;
+}
+
+/* ======== REGISTER PAGE STYLING ======== */
+/* .register-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+} */
+
+/* Posisi gambar di kiri & form di kanan */
+/* .register-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    gap: 50px; 
+} */
+
+/* Gambar di sebelah kiri */
+.register-image {
+    width: 250%;
+    max-width: 800px; /* Perbesar gambar */
+    height: auto;
+    object-fit: contain;
+    margin-left: 30px;
+}
+
+/* Menyesuaikan jarak tombol dan teks */
+.bpa {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Tombol Google */
+.btn-google {
+    background-color: #D9D9D9;
+    border: none;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn-google:hover {
+    background-color: #BEBEBE;
+}
+
+/* Ikon Google */
+.google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .register-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .register-image {
+        max-height: 350px;
+        margin-bottom: 20px;
+    }
+    
+    .auth-container {
+        max-width: 90%; /* Agar lebih responsif di mobile */
+    }
+}
+
+/* Responsive Styling */
+@media (max-width: 992px) {
+    .login-container {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .login-image {
+        max-width: 80%;
+        height: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-container h1 {
+        font-size: 28px;
+    }
+
+    .login-container p {
+        font-size: 14px;
+    }
+
+    .btn-success, .btn-google {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

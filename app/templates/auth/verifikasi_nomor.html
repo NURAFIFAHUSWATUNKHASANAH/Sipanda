@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPANDA - Verifikasi OTP</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/favicon.ico') }}">
+</head>
+
+<body>
+    <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card-container">
+
+            <!-- Gambar -->
+            <!-- <img src="{{ url_for('static', filename='image/otp.png') }}" alt="OTP"> -->
+
+            <!-- Form Verifikasi OTP -->
+            <div class="login-container">
+                <h1 class="logo-text-in-form">
+                    <span class="si">SI</span><span class="panda">PANDA</span>
+                </h1>
+                <p>Kami sudah mengirim kode OTP ke WhatsApp Anda.</p>
+
+                <form action="{{ url_for('verifikasi_nomor') }}" method="POST">
+                    <input type="text" name="otp" class="form-control" placeholder="6 digit kode" required>
+
+                    <button type="submit" class="btn btn-success mt-2">Verifikasi</button>
+
+                    <div class="bpa text-center mt-3">
+                        Belum terima kode?
+                        <a href="{{ url_for('lengkapi_nomor') }}" style="color: #004400; font-weight: 600;">Kirim ulang</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ===================== CSS TRANSPARAN MODERN (SAMA PERSIS) ===================== -->
+    <style>
+        /* ========= BACKGROUND ========= */
+        body {
+            background: url("{{ url_for('static', filename='image/background_auth.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Overlay putih transparan */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.15);
+            z-index: 0;
+        }
+
+        .container-fluid {
+            background: transparent !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========= CARD ========= */
+        .card-container {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            max-width: 900px;
+            width: 90%;
+            gap: 30px;
+            animation: fadein 0.5s ease;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========= IMAGE ========= */
+        .card-container img {
+            display: none;
+        }
+
+        @media (min-width: 992px) {
+            .card-container img {
+                display: block;
+                max-width: 350px;
+                width: 100%;
+                height: auto;
+                border-radius: 15px;
+                object-fit: contain;
+                animation: float 4s ease-in-out infinite;
+                transition: transform 0.3s ease, filter 0.3s ease;
+            }
+
+            .card-container img:hover {
+                transform: scale(1.05);
+                filter: brightness(1.1);
+            }
+        }
+
+        /* Animasi melayang */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* ========= FORM ========= */
+        .login-container {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo-text-in-form {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .logo-text-in-form .si {
+            color: #004400;
+        }
+
+        .logo-text-in-form .panda {
+            color: brown;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Form field & tombol */
+        .form-control,
+        .btn-success {
+            height: 50px;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .btn-success {
+            background-color: #004400;
+            border: none;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .btn-success:hover {
+            background-color: #003300;
+        }
+
+        /* ========= RESPONSIVE ========= */
+        @media (max-width: 992px) {
+            .card-container {
+                padding: 25px;
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .form-control,
+            .btn-success {
+                height: 45px;
+                font-size: 14px;
+            }
+        }
+
+        /* SweetAlert styling */
+        .swal-popup-custom {
+            padding: 30px 20px;
+            font-size: 1rem;
+            text-align: center;
+        }
+    </style>
+
+</body>
+
+</html>

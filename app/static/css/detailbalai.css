@@ -1,0 +1,219 @@
+*,
+html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.content-detail{
+    margin: 70px;
+    
+    min-height: calc(100vh - 60px);
+   
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.bagianHeader{
+    width: 100%;
+   
+
+    display: flex;
+    margin-top: 20px;
+}
+.bagianGambar{
+    width: 50%;
+    height: 714px;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-right: 10px;
+
+}
+.bagianGambar img{
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+
+}
+.bagianContent{
+    width: 50%;
+    height: 714px;
+    overflow: hidden;
+    
+    margin-left: 10px;
+}
+.bagianContent h1{
+    font-size: 32px;
+    font-weight: 600;
+
+}
+.bagianContent h3{
+    font-size: 16px;
+    font-weight: 300;
+
+}
+
+.garisIjo{
+    width: 120px;
+    height: 6px;
+    background-color: #014224;
+}
+.bagianContent p{
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 300;
+    color: rgb(159, 159, 159);
+    text-align: justify;
+}
+.rowCard {
+    display: flex;
+    flex-wrap: wrap; /* biar turun ke bawah kalau kepanjangan */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.cardData {
+    flex: 1 1 auto; /* biar fleksibel sesuai isi */
+    min-width: 250px; /* batas minimal biar ga terlalu kecil */
+    max-width: 100%; /* biar ga melebihi container */
+    padding: 15px 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #f9f9f9;
+    word-wrap: break-word; /* biar teks panjang kebungkus */
+    overflow-wrap: break-word; 
+    white-space: normal;
+}
+
+.cardData h2 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    color: #E9A950; /* ijo */
+}
+
+.cardData h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    color: #333;
+}
+
+.bagianLokasi{
+    margin-bottom: 10px;
+
+}
+.garisOren{
+    width: 80px;
+    height: 6px;
+    margin-left: 20px;
+    background-color: #E9A950;
+}
+
+.bagianCiri{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+
+.cardCiri{
+    
+  
+    background-color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.cardCiri h1{
+    font-size: 18px;
+    color: black;
+}
+
+/* --- RESPONSIVE CSS --- */
+@media (max-width: 1024px) {
+  .content-detail {
+    margin: 40px 20px;
+  }
+
+  .bagianHeader {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bagianGambar,
+  .bagianContent {
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  .bagianContent h1 {
+    font-size: 28px;
+  }
+
+  .bagianContent h3 {
+    font-size: 14px;
+  }
+
+  .bagianContent p {
+    font-size: 16px;
+  }
+
+  .rowCard {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cardData {
+    width: 45%;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-detail {
+    margin: 20px 10px;
+  }
+
+  .bagianContent h1 {
+    font-size: 24px;
+  }
+
+  .bagianContent p {
+    font-size: 14px;
+  }
+
+  .rowCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cardData {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .bagianContent h1 {
+    font-size: 20px;
+  }
+
+  .bagianContent h3,
+  .bagianContent p {
+    font-size: 13px;
+  }
+
+  .cardData h2 {
+    font-size: 14px;
+  }
+
+  .cardData h3 {
+    font-size: 12px;
+  }
+}

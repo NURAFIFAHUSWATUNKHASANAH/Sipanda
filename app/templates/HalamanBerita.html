@@ -1,0 +1,17 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/berita.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="berita-container">
+    <h1 class="detail-title">{{ berita.judul }}</h1>
+    <p class="detail-date">Ditulis pada <em>{{ berita.tanggal }}</em></p>
+    <hr class="detail-divider">
+    <img src="{{ url_gambar }}" alt="Gambar Berita" class="detail-image">
+    <div class="detail-content">
+        {{ berita.konten|safe }}
+    </div>
+</div>
+{% endblock %}

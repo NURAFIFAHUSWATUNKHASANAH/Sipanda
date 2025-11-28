@@ -1,0 +1,381 @@
+*,
+html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.content-databalai {
+  margin: 70px;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardData {
+  width: 100%;
+  max-width: 223px;
+  display: flex;
+  margin: 16px;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  height: 400px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.imgCardD {
+  width: 100%;
+  height: 200px;
+  border-radius: 20px;
+}
+
+.cardData img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.cardData h1 {
+  font-size: 16px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #014224;
+  text-align: center;
+  overflow: visible;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  line-height: 1.4;
+  max-width: 100%;
+}
+
+.btnCardD {
+  width: 180px;
+  height: 40px;
+  text-align: center;
+  border-radius: 8px;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  background-color: #014224;
+  font-weight: bold;
+  margin: auto;
+}
+
+.btnCardD a {
+  color: white;
+}
+
+.bagianCard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+#loader {
+  display: none;
+  text-align: center;
+  font-size: 18px;
+  margin: 20px 0;
+  color: #555;
+}
+
+#resetButton {
+  margin-left: 2px;
+  padding: 8px 16px;
+  background-color: #004d25;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#resetButton:hover {
+  background-color: #003b1c;
+}
+
+.judl {
+  color: #E9A950;
+  margin: 20px;
+  font-size: 32px;
+  letter-spacing: 10px;
+  text-align: center;
+}
+
+.para {
+  color: #014224;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.content-kanan {
+  display: flex;
+  justify-content: end;
+  margin: 20px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #888;
+}
+
+.search-button {
+  padding: 8px 16px;
+  background-color: #004d25;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.search-button:hover {
+  background-color: #003b1c;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .cardData {
+    max-width: 200px;
+    height: auto;
+  }
+
+  .btnCardD {
+    width: 150px;
+    font-size: 16px;
+  }
+
+  .judl {
+    font-size: 28px;
+    letter-spacing: 8px;
+  }
+
+  .para {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .cardData {
+    max-width: 180px;
+  }
+
+  .btnCardD {
+    width: 140px;
+    font-size: 14px;
+  }
+
+  .judl {
+    font-size: 24px;
+    letter-spacing: 6px;
+  }
+
+  .para {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-databalai {
+    margin: 70px;
+  }
+  .cardData {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .btnCardD {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  .judl {
+    font-size: 20px;
+    letter-spacing: 4px;
+  }
+
+  .para {
+    font-size: 14px;
+  }
+}
+/* iPhone SE, iPhone 5/5s (Max Width: 320px) */
+@media (max-width: 320px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .cardData {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .imgCardD {
+    height: 150px;
+  }
+
+  .cardData h1 {
+    font-size: 12px;
+  }
+
+  .btnCardD {
+    width: 100px;
+    font-size: 10px;
+  }
+
+  .judl {
+    font-size: 18px;
+    letter-spacing: 3px;
+  }
+
+  .para {
+    font-size: 12px;
+  }
+}
+
+/* iPhone 6/7/8, iPhone SE 2nd Gen (Max Width: 375px) */
+@media (max-width: 375px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .cardData {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .btnCardD {
+    width: 120px;
+    font-size: 12px;
+  }
+
+  .judl {
+    font-size: 20px;
+    letter-spacing: 4px;
+  }
+
+  .para {
+    font-size: 14px;
+  }
+}
+
+/* iPhone 6+/7+/8+ (Max Width: 414px) */
+@media (max-width: 414px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .cardData {
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .btnCardD {
+    width: 130px;
+    font-size: 14px;
+  }
+
+  .judl {
+    font-size: 24px;
+    letter-spacing: 5px;
+  }
+
+  .para {
+    font-size: 16px;
+  }
+}
+
+/* iPhone 11, iPhone XR, iPhone 12 Mini, iPhone 13 Mini (Max Width: 414px) */
+@media (max-width: 414px) and (min-height: 736px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .btnCardD {
+    width: 140px;
+    font-size: 14px;
+  }
+
+  .judl {
+    font-size: 24px;
+  }
+
+  .para {
+    font-size: 16px;
+  }
+}
+
+/* iPhone 12/13/14 (Max Width: 390px) */
+@media (max-width: 390px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .btnCardD {
+    width: 140px;
+    font-size: 14px;
+  }
+
+  .judl {
+    font-size: 24px;
+  }
+
+  .para {
+    font-size: 16px;
+  }
+}
+
+/* iPhone 12 Pro Max, iPhone 14 Pro Max (Max Width: 428px) */
+@media (max-width: 428px) {
+  .content-databalai {
+    margin: 70px;
+  }
+
+  .btnCardD {
+    width: 150px;
+    font-size: 16px;
+  }
+
+  .judl {
+    font-size: 26px;
+  }
+
+  .para {
+    font-size: 18px;
+  }
+}

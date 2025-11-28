@@ -1,0 +1,70 @@
+
+*,
+html {
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #EEEEE4;
+}
+/* Container untuk halaman berita */
+.berita-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Judul Berita */
+.detail-title {
+  margin-top: 100px;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Tanggal Berita */
+.detail-date {
+  font-size: 0.9rem;
+  color: #777;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Garis Pemisah */
+.detail-divider {
+  border: 0;
+  height: 1px;
+  background: #ddd;
+  margin: 20px 0;
+}
+
+/* Gambar Berita */
+.detail-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Konten Berita */
+.detail-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+  margin-top: 20px;
+  text-align: justify;
+}
+
+.detail-content p {
+  margin-bottom: 15px;
+}

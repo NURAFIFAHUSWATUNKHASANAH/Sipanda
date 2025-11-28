@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<!--=== Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!----======== CSS ======== -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='/css/sidebar.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/dashboard.css')}}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css')}}">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/favicon.ico') }}">
+    {% block styles %}{% endblock %}
+    <title>Admin</title>
+</head>
+
+<body>
+    <nav>
+        <!-- <div class="logo-name">
+            <div class="logo-image">
+                {% if bksda_profile and bksda_profile.gambar %}
+                <img src="{{ url_for('static', filename='gambarUser/' + bksda_profile.gambar) }}" alt="Logo BKSDA">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Default">
+                {% endif %}
+            </div>
+            <span class="logo_name">SIPANDA</span>
+        </div> -->
+
+        <div class="logo-name">
+            <!-- <div class="logo-image">
+                <img src="images/logo.png" alt="">
+            </div> -->
+            <span class="logo_name">SIPANDA</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                {% if session.get('role') == 'super_admin' %}
+
+                <!-- PROFIL -->
+                <li>
+                    <a href="{{ url_for('admin_bksda') }}"
+                        class="{% if request.path == url_for('admin_bksda') %}active{% endif %}">
+                        <i class="uil uil-building"></i>
+                        Profil BKSDA
+                    </a>
+                </li>
+
+                <!-- DATA MASTER DROPDOWN -->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle">
+                        <i class="uil uil-database"></i> Data Master
+                        <!-- <i class="uil uil-angle-down toggle-icon"></i> -->
+                    </a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="{{ url_for('hewan') }}"
+                                class="{% if request.path == url_for('hewan') %}active{% endif %}">
+                                <i class="uil uil-chart"></i> Data Hewan
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('list_jenis_kawasan') }}"
+                                class="{% if request.path == url_for('list_jenis_kawasan') %}active{% endif %}">
+                                <i class="uil uil-list-ul"></i> Jenis Konservasi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('list_kawasan') }}"
+                                class="{% if request.path == url_for('list_kawasan') %}active{% endif %}">
+                                <i class="uil uil-map-marker"></i> Kawasan Konservasi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('balaiKonservasi') }}"
+                                class="{% if request.path == url_for('balaiKonservasi') %}active{% endif %}">
+                                <i class="uil uil-thumbs-up"></i> Data Balai Konservasi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('unit_kerja') }}"
+                                class="{% if request.path == url_for('unit_kerja') %}active{% endif %}">
+                                <i class="uil uil-building"></i> Unit Kerja
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('kategori') }}"
+                                class="{% if request.path == url_for('kategori') %}active{% endif %}">
+                                <i class="uil uil-book"></i> Kategori
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('pengguna') }}"
+                                class="{% if request.path == url_for('pengguna') %}active{% endif %}">
+                                <i class="uil uil-user"></i> Data User
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- KONTEN DROPDOWN -->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle">
+                        <i class="uil uil-browser"></i> Konten Website
+                        <!-- <i class="uil uil-angle-down toggle-icon"></i> -->
+                    </a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="{{ url_for('admin_jumbotron') }}"
+                                class="{% if request.path == url_for('admin_jumbotron') %}active{% endif %}">
+                                <i class="uil uil-image-v"></i> Jumbotron
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin_jumbotron_images') }}"
+                                class="{% if request.path == url_for('admin_jumbotron_images') %}active{% endif %}">
+                                <i class="uil uil-images"></i> Jumbotron Images
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('Berita') }}"
+                                class="{% if request.path == url_for('Berita') %}active{% endif %}">
+                                <i class="uil uil-comments"></i> Berita
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('about_admin') }}"
+                                class="{% if request.path == url_for('about_admin') %}active{% endif %}">
+                                <i class="uil uil-info-circle"></i> About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('footer') }}"
+                                class="{% if request.path == url_for('footer') %}active{% endif %}">
+                                <i class="uil uil-foot"></i> Footer
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- AKTIVITAS & ANALISIS DROPDOWN -->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle">
+                        <i class="uil uil-chart-line"></i> Aktivitas
+                        <!-- <i class="uil uil-angle-down toggle-icon"></i> -->
+                    </a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="{{ url_for('admin') }}"
+                                class="{% if request.path == url_for('admin') %}active{% endif %}">
+                                <i class="uil uil-estate"></i> Sentimen Analisis
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('laporan') }}"
+                                class="{% if request.path == url_for('laporan') %}active{% endif %}">
+                                <i class="uil uil-files-landscapes"></i> Laporan
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                <!-- <div class="menu-items">
+            <ul class="nav-links">
+                {% if session.get('role') == 'super_admin' %}
+                <li>
+                    <a href="{{ url_for('admin_bksda') }}"
+                        class="{% if request.path == url_for('admin_bksda') %}active{% endif %}">
+                        <i class="uil uil-building"></i>
+                        Profil BKSDA
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin') }}" class="{% if request.path == url_for('admin') %}active{% endif %}">
+                        <i class="uil uil-estate"></i>
+                        Sentimen Analisis
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('about_admin') }}"
+                        class="{% if request.path == url_for('about_admin') %}active{% endif %}">
+                        <i class="uil uil-info-circle"></i>
+                        About
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_jumbotron') }}"
+                        class="{% if request.path == url_for('admin_jumbotron') %}active{% endif %}">
+                        <i class="uil uil-image-v"></i>
+                        Jumbotron
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_jumbotron_images') }}"
+                        class="{% if request.path == url_for('admin_jumbotron_images') %}active{% endif %}">
+                        <i class="uil uil-images"></i>
+                        Jumbotron Images
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('laporan') }}"
+                        class="{% if request.path == url_for('laporan') %}active{% endif %}">
+                        <i class="uil uil-files-landscapes"></i>
+                        Laporan
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('hewan') }}" class="{% if request.path == url_for('hewan') %}active{% endif %}">
+                        <i class="uil uil-chart"></i>
+                        Data Hewan
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('list_jenis_kawasan') }}"
+                        class="{% if request.path == url_for('list_jenis_kawasan') %}active{% endif %}">
+                        <i class="uil uil-list-ul"></i>
+                        Jenis Konservasi
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('list_kawasan') }}"
+                        class="{% if request.path == url_for('list_kawasan') %}active{% endif %}">
+                        <i class="uil uil-map-marker"></i>
+                        Kawasan Konservasi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('balaiKonservasi') }}"
+                        class="{% if request.path == url_for('balaiKonservasi') %}active{% endif %}">
+                        <i class="uil uil-thumbs-up"></i>
+                        Data Balai Konservasi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('pengguna') }}"
+                        class="{% if request.path == url_for('pengguna') %}active{% endif %}">
+                        <i class="uil uil-user"></i>
+                        Data User
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('unit_kerja') }}"
+                        class="{% if request.path == url_for('unit_kerja') %}active{% endif %}">
+                        <i class="uil uil-building"></i>
+                        Unit Kerja
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('kategori') }}"
+                        class="{% if request.path == url_for('kategori') %}active{% endif %}">
+                        <i class="uil uil-book"></i>
+                        Kategori
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('Berita') }}"
+                        class="{% if request.path == url_for('Berita') %}active{% endif %}">
+                        <i class="uil uil-comments"></i>
+                        Berita
+                    </a>
+                </li> -->
+                <!-- <li><a href="{{ url_for('home') }}">
+                        <i class="uil uil-home"></i>
+                        <span class="link-name">Kembali ke Web</span>
+                    </a></li>
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                        <span class="link-name">Mode Gelap</span>
+                    </a>
+                    <div class="mode-toggle">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('logout') }}">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Keluar</span>
+                    </a></li> -->
+                <!-- <li>
+                    <a href="{{ url_for('akun_balai') }}"
+                        class="{% if request.path == url_for('tambah_akun_balai') %}active{% endif %}">
+                        <i class="uil uil-user-plus"></i>
+                        Akun BKSDA
+                    </a>
+                </li> -->
+                <!-- {% endif %} -->
+
+                {% if session.get('role') == 'pihak_berwajib' %}
+                <li>
+                    <a href="{{ url_for('admin') }}" class="{% if request.path == url_for('admin') %}active{% endif %}">
+                        <i class="uil uil-estate"></i>
+                        Sentimen Analisis
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('laporan') }}"
+                        class="{% if request.path == url_for('laporan') %}active{% endif %}">
+                        <i class="uil uil-files-landscapes"></i>
+                        Laporan
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('Berita') }}"
+                        class="{% if request.path == url_for('Berita') %}active{% endif %}">
+                        <i class="uil uil-comments"></i>
+                        Berita
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="logout-mode">
+                <li><a href="{{ url_for('home') }}">
+                        <i class="uil uil-home"></i>
+                        <span class="link-name">Kembali ke Web</span>
+                    </a></li>
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                        <span class="link-name">Gelap</span>
+                    </a>
+                    <div class="mode-toggle">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('logout') }}">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Keluar</span>
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+
+            <div class="search-box">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Search here...">
+            </div>
+
+            <img src="images/profile.jpg" alt="">
+        </div>
+        <div class="dash-content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </section>
+
+    <!-- Bootstrap JS Bundle (Popper included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{url_for('static', filename='/js/script.js')}}"></script>
+    {% block scripts %}{% endblock %}
+    <style>
+        .submenu {
+            display: none;
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .dropdown.open>.submenu {
+            display: block;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* teks & icon kiri, panah kanan */
+            width: 100%;
+        }
+
+        .dropdown-toggle .toggle-icon {
+            margin-left: auto;
+            /* paksa panah selalu mepet kanan */
+            transition: transform 0.3s;
+        }
+
+        .dropdown.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".dropdown-toggle").forEach(function (toggle) {
+                toggle.addEventListener("click", function () {
+                    let parent = this.parentElement;
+                    parent.classList.toggle("open");
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

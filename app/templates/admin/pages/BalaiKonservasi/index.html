@@ -1,0 +1,338 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/balaikonservasi.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<div class="balaikonservasi-container">
+    <div class="balaikonservasi-title">
+        <i class="fa-solid fa-building"></i>
+        <span>Kelola Data Balai Konservasi</span>
+    </div>
+
+    <!-- Tombol Tambah Modal -->
+    <div class="balaikonservasi-button-container">
+        <button class="balaikonservasi-add-btn" data-toggle="modal" data-target="#tambahBalaiModal">
+            Tambah
+        </button>
+    </div>
+
+    <!-- Table Wrapper -->
+    <div class="balaikonservasi-table-responsive">
+        <table id="balaiTable" class="table table-balaikonservasi" data-toggle="table" data-search="true"
+            data-show-columns="true" data-show-refresh="true" data-pagination="true"
+            data-page-list="[5, 10, 20, 50, 100]" data-show-export="true" data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-balai"}' data-pagination-pre-text="‹" data-pagination-next-text="›">
+            <thead class="thead-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Gambar</th>
+                    <th>Nama Balai</th>
+                    <th data-visible="false">Deskripsi</th>
+                    <th>Provinsi</th>
+                    <th>Alamat</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Call Center</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in balai %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <a href="{{ url_for('static', filename='gambarUser/' + b.gambarbalai) }}" target="_blank">
+                            <img src="{{ url_for('static', filename='gambarUser/' + b.gambarbalai) }}"
+                                class="table-img-balaikonservasi">
+                        </a>
+                    </td>
+                    <td>{{ b.nama_balai }}</td>
+                    <td>{{ b.deskripsi[:40] }}...</td>
+                    <td>{{ b.provinsi }}</td>
+                    <td>{{ b.alamat }}</td>
+                    <td>{{ b.latitude }}</td>
+                    <td>{{ b.longitude }}</td>
+                    <td>{{ b.call_center }}</td>
+                    <td>
+                        <div class="balaikonservasi-action-buttons">
+                            <button class="balaikonservasi-btn-circle edit" title="Edit"
+                                data-id="{{ b.id_balaikonservasi }}" data-nama="{{ b.nama_balai }}"
+                                data-deskripsi="{{ b.deskripsi }}" data-provinsi="{{ b.provinsi }}"
+                                data-alamat="{{ b.alamat }}" data-latitude="{{ b.latitude }}"
+                                data-longitude="{{ b.longitude }}" data-callcenter="{{ b.call_center }}"
+                                data-gambar="{{ url_for('static', filename='gambarUser/' + b.gambarbalai) }}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+
+                            <form action="{{ url_for('deletebalai', id_balaikonservasi=b.id_balaikonservasi) }}"
+                                method="POST" class="delete-form d-inline">
+                                <button type="button" class="balaikonservasi-btn-circle delete" title="Hapus">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- =======================
+     MODAL TAMBAH BALAI
+======================= -->
+<div class="modal fade" id="tambahBalaiModal" tabindex="-1" aria-labelledby="tambahBalaiLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data Balai Konservasi</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form id="formTambahBalai" enctype="multipart/form-data" method="POST"
+                action="{{ url_for('tambahDatabalais') }}">
+                <div class="modal-body">
+                    <div class="form-group"><label>Nama Balai</label><input type="text" name="nama_balai"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Deskripsi</label><textarea name="deskripsi" class="form-control"
+                            rows="2" required></textarea></div>
+                    <div class="form-group"><label>Provinsi</label><input type="text" name="provinsi"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Alamat</label><textarea name="alamat" class="form-control" rows="2"
+                            required></textarea></div>
+                    <div class="form-group"><label>Latitude</label><input type="text" name="latitude"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Longitude</label><input type="text" name="longitude"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Call Center</label><input type="text" name="call_center"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Gambar Balai</label><input type="file" name="gambarbalai"
+                            accept="image/*" class="form-control" required></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- =======================
+     MODAL EDIT BALAI
+======================= -->
+<div class="modal fade" id="editBalaiModal" tabindex="-1" aria-labelledby="editBalaiLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data Balai Konservasi</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form id="formEditBalai" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id_balaikonservasi" id="edit_id">
+                    <div class="form-group"><label>Nama Balai</label><input type="text" name="nama_balai" id="edit_nama"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Deskripsi</label><textarea name="deskripsi" id="edit_deskripsi"
+                            class="form-control" rows="2" required></textarea></div>
+                    <div class="form-group"><label>Provinsi</label><input type="text" name="provinsi" id="edit_provinsi"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Alamat</label><textarea name="alamat" id="edit_alamat"
+                            class="form-control" rows="2" required></textarea></div>
+                    <div class="form-group"><label>Latitude</label><input type="text" name="latitude" id="edit_latitude"
+                            class="form-control" required></div>
+                    <div class="form-group"><label>Longitude</label><input type="text" name="longitude"
+                            id="edit_longitude" class="form-control" required></div>
+                    <div class="form-group"><label>Call Center</label><input type="text" name="call_center"
+                            id="edit_callcenter" class="form-control" required></div>
+                    <div class="form-group">
+                        <label>Ganti Gambar (Opsional)</label>
+                        <input type="file" name="gambarbalai" accept="image/*" class="form-control">
+                        <!-- Preview Gambar Lama -->
+                        <div id="preview-container" class="mt-2">
+                            <img id="preview_gambar" src="" alt="Preview Gambar" class="img-fluid rounded"
+                                style="max-height: 200px; display: none;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- =======================
+     SCRIPT CRUD
+======================= -->
+<script>
+    $(function () {
+        // Hapus Data
+        $(document).on('click', '.delete', function (e) {
+            e.preventDefault();
+            const form = $(this).closest('.delete-form');
+
+            Swal.fire({
+                title: 'Yakin hapus data ini?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $.post(form.attr('action'))
+                        .done(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil dihapus',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        })
+                        .fail(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: 'Terjadi kesalahan saat menghapus data',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                }
+            });
+        });
+
+        // Tambah Data
+        $('#formTambahBalai').on('submit', function (e) {
+            e.preventDefault();
+
+            // Ambil nilai input
+            const lat = $('input[name="latitude"]').val().trim();
+            const long = $('input[name="longitude"]').val().trim();
+
+            // Validasi apakah numerik
+            if (isNaN(lat) || isNaN(long) || lat === "" || long === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Input Tidak Valid!',
+                    text: 'Latitude dan Longitude harus berupa angka.',
+                    confirmButtonColor: '#3085d6'
+                });
+                return; // hentikan proses kirim
+            }
+
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: () => {
+                    $('#tambahBalaiModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil ditambahkan',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: (xhr) => {
+                    let msg = 'Terjadi kesalahan saat menambahkan data.';
+                    if (xhr.responseText.includes("ValueError")) {
+                        msg = 'Pastikan Latitude dan Longitude berupa angka.';
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: msg,
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            });
+        });
+
+        // Saat tombol edit diklik
+        $(document).on('click', '.edit', function () {
+            $('#edit_id').val($(this).data('id'));
+            $('#edit_nama').val($(this).data('nama'));
+            $('#edit_deskripsi').val($(this).data('deskripsi'));
+            $('#edit_provinsi').val($(this).data('provinsi'));
+            $('#edit_alamat').val($(this).data('alamat'));
+            $('#edit_latitude').val($(this).data('latitude'));
+            $('#edit_longitude').val($(this).data('longitude'));
+            $('#edit_callcenter').val($(this).data('callcenter'));
+
+            const gambarUrl = $(this).data('gambar');
+            if (gambarUrl) {
+                $('#preview_gambar').attr('src', gambarUrl).show();
+            } else {
+                $('#preview_gambar').hide();
+            }
+
+            $('#editBalaiModal').modal('show');
+        });
+
+        // Tutup modal edit
+        $('#editBalaiModal').on('click', '[data-dismiss="modal"]', function () {
+            $('#editBalaiModal').modal('hide');
+        });
+
+        // Preview gambar baru saat pilih file
+        $('input[name="gambarbalai"]').on('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview_gambar').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Simpan Edit
+        $('#formEditBalai').on('submit', function (e) {
+            e.preventDefault();
+            const id = $('#edit_id').val();
+            $.ajax({
+                url: `/admin/balaikonservasi/update/${id}`,
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: () => {
+                    $('#editBalaiModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil diperbarui',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: () => Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data', 'error')
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

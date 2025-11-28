@@ -1,0 +1,98 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dataHewan.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="content-databalai">
+    <h1 class="judl">Kumpulan Data Hewan</h1>
+    <p class="para">Daftar total hewan yang dilindungi di Indonesia</p>
+    <div class="content-kanan">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari hewan atau kategori">
+            <button id="searchButton" class="search-button">Cari</button>
+            <button id="resetButton">Kembali</button>
+        </div>
+    </div>
+
+    <div id="loader" style="display: none;">Memuat data...</div>
+
+    <div class="bagianCard" id="cardContainer">
+        {% if hewans %}
+        {% for hewan in hewans %}
+        <div class="cardData">
+            <div class="imgCardD">
+                <img src="{{ url_for('static', filename='gambarUser/' + hewan.url_gambar) }}" alt="{{ hewan.nama }}">
+            </div>
+            <h1 title="{{ hewan.nama }}">{{ hewan.nama }}</h1>
+            <p>Kategori: {{ hewan.kategori.nama_kategori if hewan.kategori else 'Tidak diketahui' }}</p>
+            <div class="btnCardD">
+                <a href="{{ url_for('pindahHalaman', id_hewan=hewan.id_hewan) }}">Lihat</a>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="no-data-message">{{ no_data_message }}</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const resetButton = document.getElementById('resetButton');
+    const loader = document.getElementById('loader');
+    const cardContainer = document.getElementById('cardContainer');
+
+    function loadAllData() {
+        loader.style.display = 'block'; 
+        fetch('/HalamanDataHewan')
+            .then(response => response.text())
+            .then(html => {
+                loader.style.display = 'none';
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newCards = doc.querySelector('.bagianCard').innerHTML;
+                cardContainer.innerHTML = newCards; 
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                console.error('Error:', err);
+            });
+    }
+
+    searchButton.addEventListener('click', function () {
+        const query = searchInput.value.trim(); 
+        if (query) {
+            loader.style.display = 'block'; 
+            fetch(`/HalamanDataHewan?search=${encodeURIComponent(query)}`) 
+                .then(response => response.text())
+                .then(html => {
+                    loader.style.display = 'none'; 
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newCards = doc.querySelector('.bagianCard').innerHTML;
+                    cardContainer.innerHTML = newCards;
+                })
+                .catch(err => {
+                    loader.style.display = 'none';
+                    console.error('Error:', err);
+                });
+        } else {
+            loadAllData();
+        }
+    });
+
+    resetButton.addEventListener('click', function () {
+        window.location.href = '/'; 
+    });
+
+    document.addEventListener('DOMContentLoaded', loadAllData);
+</script>
+{% endblock %}

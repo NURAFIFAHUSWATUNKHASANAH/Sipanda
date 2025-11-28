@@ -1,0 +1,31 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<form action="{{ url_for('update_berita', berita_id=berita.id) }}" method="POST" enctype="multipart/form-data" class="edit-form">
+    <div class="form-group">
+        <label for="title">Judul Berita</label>
+        <input type="text" id="title" name="title" value="{{ berita.judul }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="date">Tanggal</label>
+        <input type="date" id="date" name="date" value="{{ berita.tanggal }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="image">Gambar</label>
+        {% if berita.gambar %}
+        <img src="{{ url_for('static', filename='gambarUser/' + berita.gambar) }}" alt="Current Image" width="100">
+        {% endif %}
+        <input type="file" id="image" name="image" accept="image/*">
+    </div>
+
+    <div class="form-group">
+        <label for="content">Konten Berita</label>
+        <textarea id="content" name="content" rows="8" required>{{ berita.konten }}</textarea>
+    </div>
+    <div class="button-container">
+    <button type="submit" class="add-data-btn">Simpan</button>
+    </div>
+</form>
+{% endblock %}

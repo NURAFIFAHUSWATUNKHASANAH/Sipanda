@@ -1,0 +1,129 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-header">
+    <img src="{{ url_for('static', filename='img/PandaGo.png') }}" alt="Panda Avatar">
+    <button class="close-chat" id="close-chat">✖</button>
+</div>
+
+<div class="chat-container">
+    <div class="sidebar">
+        <div class="profile">
+            <img src="{{ url_for('static', filename='img/panda.png') }}" alt="Panda Avatar">
+        </div>
+        <div class="chat-history">
+            <div class="date">Today</div>
+            <div class="message-preview">Apa itu hewan dilindungi?</div>
+        </div>
+    </div>
+    <div class="chat-box">
+        <div class="chat-header">
+            <img src="{{ url_for('static', filename='img/PandaGo.png') }}" alt="Panda Avatar">
+        </div>
+        <div class="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" placeholder="Kirim Pesan PandaGo" id="user-input">
+            <button id="send-btn">➤</button>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    // document.querySelector('#send-btn').addEventListener('click', function() {
+    //     const inputField = document.querySelector('#user-input');
+    //     const userMessage = inputField.value;
+
+    //     if (userMessage.trim()) {
+    //         fetch('/api/chatbot', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({ message: userMessage })
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             const chatMessages = document.querySelector('.chat-messages');
+
+    //             // Tambahkan pesan user
+    //             const userMessageElement = document.createElement('div');
+    //             userMessageElement.classList.add('message', 'sent');
+    //             userMessageElement.innerHTML = `<p>${userMessage}</p>`;
+    //             chatMessages.appendChild(userMessageElement);
+
+    //             // Tambahkan pesan bot
+    //             if (data.response) {
+    //                 const botMessageElement = document.createElement('div');
+    //                 botMessageElement.classList.add('message');
+    //                 botMessageElement.innerHTML = `
+    //                     <div class="message profilechat">
+    //                         <img src="{{ url_for('static', filename='img/PandaGo.png') }}" alt="Panda Avatar">
+    //                     </div>
+    //                     <div class="message received">
+    //                         <p>${data.response}</p>
+    //                     </div>`;
+    //                 chatMessages.appendChild(botMessageElement);
+    //             }
+    //             inputField.value = '';
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    //     }
+    // });
+    document.querySelector('#send-btn').addEventListener('click', function () {
+        const inputField = document.querySelector('#user-input');
+        const userMessage = inputField.value;
+
+        if (userMessage.trim()) {
+            fetch('/api/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const chatMessages = document.querySelector('.chat-messages');
+
+                    // Tambahkan pesan user
+                    const userMessageElement = document.createElement('div');
+                    userMessageElement.classList.add('message', 'sent');
+                    userMessageElement.innerHTML = `<p>${userMessage}</p>`;
+                    chatMessages.appendChild(userMessageElement);
+
+                    // Tambahkan pesan bot
+                    if (data.response) {
+                        const botMessageElement = document.createElement('div');
+                        botMessageElement.classList.add('message');
+                        botMessageElement.innerHTML = `
+                    <div class="message profilechat">
+                        <img src="/static/img/PandaGo.png" alt="Panda Avatar">
+                    </div>
+                    <div class="message received">
+                        <p>${data.response}</p>
+                    </div>`;
+                        chatMessages.appendChild(botMessageElement);
+                    }
+                    inputField.value = '';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+
+
+    document.getElementById('close-chat').addEventListener('click', function() {
+    document.querySelector('.chat-container').style.display = 'none';
+});
+
+</script>
+{% endblock %}

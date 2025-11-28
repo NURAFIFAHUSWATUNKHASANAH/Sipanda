@@ -1,0 +1,62 @@
+{
+    "Bekantan": {
+        "status": "DILINDUNGI",
+        "latin_name": "Nasalis larvatus",
+        "habitat": "Hutan mangrove dan rawa di Kalimantan",
+        "description": "Bekantan dikenal dengan hidung panjang pada jantan dan merupakan primata endemik Kalimantan yang populasinya menurun akibat deforestasi dan perburuan."
+    },
+    "Beruang Madu": {
+        "status": "DILINDUNGI",
+        "latin_name": "Helarctos malayanus",
+        "habitat": "Hutan tropis Asia Tenggara termasuk Sumatra dan Kalimantan",
+        "description": "Beruang madu adalah spesies beruang terkecil di dunia, dikenal dengan tanda berwarna kuning di dada dan populasinya terancam oleh kehilangan habitat."
+    },
+    "Cendrawasih Botak": {
+        "status": "DILINDUNGI",
+        "latin_name": "Cicinnurus respublica",
+        "habitat": "Hutan dataran rendah di Pulau Waigeo dan Batanta, Papua Barat",
+        "description": "Cendrawasih Botak adalah burung endemik Papua Barat dengan kepala biru terang dan tubuh merah, dikenal karena keindahan tarian kawinnya."
+    },
+    "Gelatik Jawa": {
+        "status": "DILINDUNGI",
+        "latin_name": "Padda oryzivora",
+        "habitat": "Sawah dan padang rumput di Pulau Jawa dan Bali",
+        "description": "Gelatik Jawa adalah burung kecil pemakan biji yang endemik Jawa dan terancam punah akibat perburuan untuk perdagangan burung hias."
+    },
+    "Kakatua Jambul Kuning": {
+        "status": "DILINDUNGI",
+        "latin_name": "Cacatua sulphurea",
+        "habitat": "Hutan kering, savana, dan daerah pantai di Nusa Tenggara dan Sulawesi",
+        "description": "Kakatua Jambul Kuning memiliki jambul kuning khas dan merupakan spesies burung endemik Indonesia yang sangat terancam punah."
+    },
+    "Kasturi Kepala Hitam": {
+        "status": "DILINDUNGI",
+        "latin_name": "Lorius lory",
+        "habitat": "Hutan hujan Papua dan pulau-pulau sekitarnya",
+        "description": "Kasturi Kepala Hitam adalah burung paruh bengkok berwarna cerah dengan kepala hitam pekat, sangat aktif dan mudah dikenali suaranya."
+    },
+    "Kasturi Ternate": {
+        "status": "DILINDUNGI",
+        "latin_name": "Lorius garrulus",
+        "habitat": "Hutan tropis di Kepulauan Maluku Utara, termasuk Ternate dan Halmahera",
+        "description": "Kasturi Ternate memiliki bulu merah cerah dengan corak ungu dan hijau, merupakan burung endemik Maluku yang populasinya menurun karena perdagangan ilegal."
+    },
+    "Kukang Jawa": {
+        "status": "DILINDUNGI",
+        "latin_name": "Nycticebus javanicus",
+        "habitat": "Hutan tropis dan hutan sekunder di Jawa Barat",
+        "description": "Kukang Jawa adalah primata kecil nokturnal dengan mata besar, bergerak lambat, dan dilindungi karena terancam oleh perdagangan satwa liar."
+    },
+    "Landak Jawa": {
+        "status": "DILINDUNGI",
+        "latin_name": "Hystrix javanica",
+        "habitat": "Hutan tropis dan pegunungan di Jawa dan Bali",
+        "description": "Landak Jawa memiliki duri panjang tajam sebagai pertahanan diri dan kini populasinya menurun akibat perburuan serta kerusakan habitat."
+    },
+    "Owa Jawa": {
+        "status": "DILINDUNGI",
+        "latin_name": "Hylobates moloch",
+        "habitat": "Hutan pegunungan di Jawa Barat dan Tengah",
+        "description": "Owa Jawa adalah primata arboreal dengan suara panggilan khas, hidup berpasangan, dan sangat terancam punah karena fragmentasi hutan."
+    }
+}

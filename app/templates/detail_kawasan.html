@@ -1,0 +1,23 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/berita.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="berita-container">
+    <h1 class="detail-title">{{ kawasan.nama }}</h1>
+    <p class="detail-date">
+        Jenis: <strong>{{ kawasan.jenis.nama }}</strong> | Lokasi: <em>{{ kawasan.lokasi }}</em>
+    </p>
+    <hr class="detail-divider">
+
+    {% if url_foto %}
+        <img src="{{ url_foto }}" alt="Foto Kawasan" class="detail-image">
+    {% endif %}
+
+    <div class="detail-content">
+        {{ kawasan.deskripsi|safe }}
+    </div>
+</div>
+{% endblock %}

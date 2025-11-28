@@ -1,0 +1,833 @@
+/* ===== Halaman Daftar Konservasi (datakonservasi.css - versi ringkas & aktif) ===== */
+/* (duplicated for balaikonservasi) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+:root {
+    --warna-utama-konservasi: #014224;
+    --warna-hapus-konservasi: #c9302c;
+    --warna-hover-konservasi: #007a41;
+    --warna-hover-hapus: #d9534f;
+    --warna-tabel-head: #ffffff;
+    --warna-tabel-border: #ddd;
+
+    /* Dark mode vars */
+    --warna-dasar-dark: #242526;
+    --warna-utama-konservasi-dark: #3A3B3C;
+    --warna-simpan-konservasi-dark: #979797;
+    --warna-hapus-konservasi-dark: #5d5d5d;
+    --warna-hover-konservasi-dark: #3A3B3C;
+    --warna-hover-hapus-konservasi-dark: #3A3B3C;
+    --warna-tabel-head-dark: #CCC;
+    --warna-tabel-border-dark: #4D4C4C;
+    --warna-text-dark: #CCC;
+    --warna-modal-body-dark: #3A3B3C;
+}
+
+/* ===== Layout Utama ===== */
+.balaikonservasi-container {
+    background: #ffffff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.527);
+    font-size: 14px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+body.dark .balaikonservasi-container {
+    background: var(--warna-dasar-dark);
+    color: var(--warna-text-dark);
+}
+
+.balaikonservasi-container:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== Judul Halaman ===== */
+.balaikonservasi-title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--warna-utama-konservasi);
+}
+
+body.dark .balaikonservasi-title {
+    color: var(--warna-text-dark);
+}
+
+.balaikonservasi-title i {
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+/* ===== Tombol Tambah ===== */
+.balaikonservasi-button-container {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.balaikonservasi-add-btn {
+    background: #014224;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.balaikonservasi-add-btn:hover {
+    transform: translateY(-2px);
+    background: #016d3a;
+}
+
+body.dark .balaikonservasi-add-btn {
+    background: var(--warna-utama-konservasi-dark);
+    color: var(--warna-text-dark);
+}
+
+body.dark .balaikonservasi-add-btn:hover {
+    background: var(--warna-hover-konservasi-dark);
+}
+
+/* ===========================
+        Tabel Konservasi Custom
+   =========================== */
+.table-balaikonservasi {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table-balaikonservasi thead th {
+    background-color: #014224 !important;
+    color: #fff !important;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #e5e5e5;
+}
+
+/* Dark mode seluruh tabel */
+body.dark .table-balaikonservasi,
+body.dark .table-balaikonservasi thead,
+body.dark .table-balaikonservasi tbody,
+body.dark .table-balaikonservasi th,
+body.dark .table-balaikonservasi td {
+    background-color: #3A3B3C !important;
+    color: #CCC !important;
+    border-color: #4D4C4C !important;
+}
+
+body.dark .table-balaikonservasi.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #3A3B3C !important;
+}
+
+body.dark .table-balaikonservasi.table-striped tbody tr:nth-of-type(even) {
+    background-color: #38393A !important;
+}
+
+body.dark .table-balaikonservasi tbody tr:hover {
+    background-color: #4D4C4C !important;
+}
+
+body.dark .table-balaikonservasi thead th {
+    background-color: var(--warna-utama-konservasi-dark) !important;
+    color: var(--warna-tabel-head-dark) !important;
+    border: 1px solid var(--warna-tabel-border-dark);
+}
+
+.table-balaikonservasi tbody tr,
+.table-balaikonservasi.table-striped tbody tr,
+.table-balaikonservasi.table-hover tbody tr {
+    background-color: transparent !important;
+    color: #333 !important;
+}
+
+body.dark .table-balaikonservasi tbody tr {
+    background-color: #3A3B3C !important;
+    color: #CCC !important;
+}
+
+/* ===== Gaya Gambar dalam Tabel ===== */
+.table-img-balaikonservasi {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ===== Table Konservasi Responsive ===== */
+.table-balaikonservasi td,
+.table-balaikonservasi th {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.balaikonservasi-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===========================
+   Tombol Aksi Bulat
+   =========================== */
+.balaikonservasi-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.balaikonservasi-btn-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.balaikonservasi-btn-circle.edit {
+    background-color: var(--warna-utama-konservasi);
+}
+
+.balaikonservasi-btn-circle.edit:hover {
+    background-color: var(--warna-hover-konservasi);
+    transform: translateY(-2px);
+}
+
+.balaikonservasi-btn-circle.delete {
+    background-color: var(--warna-hapus-konservasi);
+}
+
+.balaikonservasi-btn-circle.delete:hover {
+    background-color: var(--warna-hover-hapus);
+    transform: translateY(-2px);
+}
+
+body.dark .balaikonservasi-btn-circle.edit {
+    background-color: var(--warna-utama-konservasi-dark);
+}
+
+body.dark .balaikonservasi-btn-circle.edit:hover {
+    background-color: var(--warna-hover-konservasi-dark);
+}
+
+body.dark .balaikonservasi-btn-circle.delete {
+    background-color: var(--warna-hapus-konservasi-dark);
+}
+
+body.dark .balaikonservasi-btn-circle.delete:hover {
+    background-color: var(--warna-hover-hapus-konservasi-dark);
+}
+
+/* ===== Responsif ===== */
+@media (max-width: 768px) {
+    .balaikonservasi-add-btn {
+        font-size: 13px;
+        padding: 8px 14px;
+        height: 36px;
+    }
+
+    .balaikonservasi-btn-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+
+    .table-img-balaikonservasi {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ===========================
+   Toolbar untuk tabel Konservasi
+   =========================== */
+.bootstrap-table .fixed-table-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    margin-bottom: 12px;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+/* Grup tombol */
+.bootstrap-table .fixed-table-toolbar .btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* Tombol toolbar */
+.bootstrap-table .fixed-table-toolbar .btn,
+.bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+    background-color: #014224 !important;
+    border-color: #014224 !important;
+    color: #fff !important;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 16px;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 6px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+}
+
+.bootstrap-table .fixed-table-toolbar .btn:hover,
+.bootstrap-table .fixed-table-toolbar .dropdown-toggle:hover {
+    background-color: #007a41 !important;
+    border-color: #007a41 !important;
+}
+
+/* Input pencarian */
+.bootstrap-table .fixed-table-toolbar .search input {
+    height: 38px;
+    border-radius: 6px;
+    width: 250px;
+    font-size: 14px;
+    padding: 0 10px;
+    max-width: 100%;
+}
+
+/* Dropdown */
+.bootstrap-table .fixed-table-toolbar .dropdown-menu {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* Dark mode toolbar dan tombol */
+body.dark .bootstrap-table .fixed-table-toolbar .btn,
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+    background-color: #3A3B3C !important;
+    border-color: #3A3B3C !important;
+    color: #CCC !important;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .btn:hover,
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-toggle:hover {
+    background-color: #4D4C4C !important;
+    border-color: #4D4C4C !important;
+    color: #FFF !important;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .search input {
+    background-color: #3A3B3C;
+    border: 1px solid #4D4C4C;
+    color: #CCC;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-menu {
+    background-color: #3A3B3C;
+    color: #CCC;
+    border: 1px solid #4D4C4C;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-menu a {
+    color: #CCC;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-menu a:hover {
+    background-color: #4D4C4C;
+    color: #FFF;
+}
+
+/* ===== Gaya Toolbar dengan Ikon ===== */
+.toolbar-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.toolbar-icons .btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toolbar-icons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ===========================
+   RESPONSIVE TOOLBAR
+   =========================== */
+
+/* Untuk layar sedang (tablet landscape, 992px ke bawah) */
+@media (max-width: 992px) {
+    .bootstrap-table .fixed-table-toolbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search input {
+        width: 200px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn,
+    .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+        font-size: 13px;
+        padding: 6px 12px;
+        min-width: 80px;
+        height: 36px;
+    }
+}
+
+/* Untuk layar kecil (tablet portrait atau ponsel besar, 768px ke bawah) */
+@media (max-width: 768px) {
+    .bootstrap-table .fixed-table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search {
+        width: 100%;
+        order: 1;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search input {
+        width: 100%;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn-group {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        order: 2;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn,
+    .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+        flex: 1 1 48%;
+        min-width: unset;
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+}
+
+/* Untuk layar sangat kecil (ponsel, 576px ke bawah) */
+@media (max-width: 576px) {
+    .bootstrap-table .fixed-table-toolbar {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search input {
+        width: 100%;
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn-group {
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn,
+    .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+        width: 100%;
+        font-size: 12px;
+        padding: 6px 8px;
+        height: 34px;
+    }
+}
+
+/* Responsif di layar kecil */
+@media (max-width: 768px) {
+    .table-balaikonservasi {
+        font-size: 13px;
+    }
+
+    .table-balaikonservasi th,
+    .table-balaikonservasi td {
+        padding: 6px 8px;
+    }
+
+    .toolbar-icons {
+        justify-content: center;
+    }
+
+    .toolbar-icons .btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .table-img-balaikonservasi {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ===== Responsif tabel dan toolbar untuk layar sangat kecil ===== */
+@media (max-width: 576px) {
+    .table-balaikonservasi {
+        font-size: 12px;
+    }
+
+    .table-balaikonservasi th,
+    .table-balaikonservasi td {
+        padding: 4px 6px;
+    }
+
+    .balaikonservasi-container {
+        padding: 16px 12px;
+        font-size: 13px;
+    }
+
+    .balaikonservasi-add-btn {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .balaikonservasi-btn-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .table-img-balaikonservasi {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ===========================
+   MODAL TAMBAH DAN EDIT DATA KONSERVASI
+   =========================== */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+body.dark .modal-content {
+    background-color: var(--warna-modal-body-dark);
+}
+
+.modal-header {
+    background-color: var(--warna-utama-konservasi);
+    color: #fff;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+}
+
+body.dark .modal-header {
+    background-color: var(--warna-utama-konservasi-dark);
+    color: var(--warna-text-dark);
+}
+
+.modal-header .modal-title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.modal-header .close {
+    color: #fff;
+    opacity: 0.8;
+    font-size: 26px;
+    transition: 0.2s;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 24px;
+    background-color: #fafafa;
+}
+
+body.dark .modal-body {
+    background-color: var(--warna-modal-body-dark);
+    color: var(--warna-text-dark);
+}
+
+.modal-body .form-group label {
+    font-weight: 500;
+    color: #014224;
+    margin-bottom: 6px;
+}
+
+.modal-body .form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+body.dark .modal-body .form-control {
+    background-color: #3A3B3C;
+    color: #CCC;
+    border: 1px solid #4D4C4C;
+}
+
+.modal-body .form-control:focus {
+    border-color: var(--warna-utama-konservasi);
+    box-shadow: 0 0 0 0.15rem rgba(1, 66, 36, 0.3);
+}
+
+body.dark .form-control:focus {
+    border-color: #CCC;
+    box-shadow: 0 0 0 0.15rem rgba(204, 204, 204, 0.25);
+}
+
+/* Tombol di bagian bawah modal */
+.modal-footer,
+.modal-body .text-right {
+    background-color: #fff;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+body.dark .modal-footer{
+    background-color: var(--warna-modal-body-dark);
+}
+
+.btn-success {
+    background-color: var(--warna-utama-konservasi);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+body.dark .btn-success {
+    background-color: var(--warna-simpan-konservasi-dark);
+    color: var(--warna-text-dark);
+}
+
+.btn-success:hover {
+    background-color: var(--warna-hover-konservasi);
+    transform: translateY(-2px);
+}
+
+body.dark .btn-success:hover {
+    background-color: var(--warna-hover-konservasi-dark);
+    color: #FFF;
+}
+
+.btn-secondary {
+    border-radius: 8px;
+    padding: 8px 18px;
+    background-color: var(--warna-hapus-konservasi);
+    border: none;
+    transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #b3b3b3;
+    transform: translateY(-2px);
+}
+
+body.dark .btn-secondary {
+    background-color: var(--warna-hapus-konservasi-dark);
+    color: var(--warna-text-dark);
+}
+
+body.dark .btn-secondary:hover {
+    background-color: #5a5a5a;
+    color: #FFF;
+}
+
+/* Tombol tambah ciri-ciri */
+#add-ciri-balaikonservasi {
+    background-color: #007a41;
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 6px 14px;
+    transition: 0.3s ease;
+}
+
+#add-ciri-balaikonservasi:hover {
+    background-color: #009652;
+    transform: translateY(-2px);
+}
+
+/* Responsif Modal */
+@media (max-width: 576px) {
+    .modal-body {
+        padding: 16px;
+    }
+
+    .modal-header .modal-title {
+        font-size: 16px;
+    }
+
+    .modal-body .btn-success,
+    .modal-body .btn-secondary {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+#edit-ciri-balaikonservasi-container label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+#edit-ciri-balaikonservasi-container input {
+    margin-bottom: 8px;
+}
+
+/* Dark mode untuk label dan tombol add ciri */
+body.dark .modal-body label {
+    color: var(--warna-text-dark) !important;
+}
+
+body.dark #add-ciri-balaikonservasi {
+    background-color: var(--warna-utama-konservasi-dark) !important;
+    color: var(--warna-text-dark) !important;
+    border: 1px solid var(--warna-tabel-border-dark);
+}
+
+body.dark #add-ciri-balaikonservasi:hover {
+    background-color: var(--warna-hover-konservasi-dark) !important;
+    color: #FFF !important;
+}
+
+/* ==============================
+   Input File di Modal Konservasi
+   ============================== */
+
+/* Style umum input file */
+.modal-body input[type="file"] {
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+/* === DARK MODE === */
+body.dark .modal-body input[type="file"] {
+    background-color: #3A3B3C; /* warna dasar dark */
+    color: #CCC; /* teks terang */
+    border: 1px solid #4D4C4C; /* garis lembut */
+}
+
+/* Hover & Focus (dark) */
+body.dark .modal-body input[type="file"]:hover,
+body.dark .modal-body input[type="file"]:focus {
+    border-color: #CCC;
+    box-shadow: 0 0 0 0.15rem rgba(204, 204, 204, 0.25);
+}
+
+/* Tombol “Choose File” (WebKit browser) */
+body.dark .modal-body input[type="file"]::-webkit-file-upload-button {
+    background-color: #3A3B3C;
+    color: #CCC;
+    border: 1px solid #4D4C4C;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover tombol choose file (dark mode) */
+body.dark .modal-body input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #4D4C4C;
+    color: #FFF;
+}
+
+/* ==============================
+   DARK MODE UNTUK SWEETALERT2
+============================== */
+body.dark .swal2-popup {
+    background-color: #2b2b2b !important;
+    color: #f1f1f1 !important;
+    border: 1px solid #4D4C4C;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+body.dark .swal2-title {
+    color: #f1f1f1 !important;
+}
+
+body.dark .swal2-html-container {
+    color: #dcdcdc !important;
+}
+
+body.dark .swal2-confirm {
+    background-color: #3A3B3C !important;
+    color: #fff !important;
+    border: 1px solid #4D4C4C !important;
+}
+
+body.dark .swal2-confirm:hover {
+    background-color: #4D4C4C !important;
+}
+
+body.dark .swal2-cancel {
+    background-color: #5a1e1e !important;
+    color: #fff !important;
+    border: 1px solid #4D4C4C !important;
+}
+
+body.dark .swal2-cancel:hover {
+    background-color: #7a2e2e !important;
+}
+
+body.dark .swal2-icon {
+    border-color: #999 !important;
+}
+
+body.dark .swal2-icon.swal2-success [class^='swal2-success-line'],
+body.dark .swal2-icon.swal2-success [class*=' swal2-success-line'] {
+    background-color: #4caf50 !important;
+}
+
+body.dark .swal2-icon.swal2-error {
+    border-color: #f44336 !important;
+    color: #f44336 !important;
+}
+
+body.dark .swal2-icon.swal2-warning {
+    border-color: #ff9800 !important;
+    color: #ff9800 !important;
+}

@@ -1,0 +1,395 @@
+*,
+html {
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #EEEEE4;
+}
+
+.container {
+    text-align: center;
+    margin: 100px auto;
+    max-width: 900px;
+    overflow: hidden;
+}
+
+.card {
+    margin-top: 50px;
+    background-color: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.btn {
+    margin-top: 10px;
+    background-color: #014224;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn:hover {
+    background-color: #013b20;
+}
+
+.image-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.illustration {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+
+
+@media screen and (max-width: 1024px) {
+    .container {
+        margin: 50px auto;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        padding: 30px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+    }
+}
+
+/* Mobile Landscape (Max Width: 768px) */
+@media screen and (max-width: 768px) {
+    .container {
+        margin: 30px auto;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+    }
+}
+
+/* Mobile Portrait (Max Width: 480px) */
+@media screen and (max-width: 480px) {
+    .container {
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .card {
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
+/* iPhone-Specific Styles */
+
+/* iPhone SE, iPhone 5/5S */
+@media screen and (max-width: 375px) {
+    .container {
+        margin: 10px auto;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}
+
+/* iPhone 11/12/13 (Pro/Pro Max) */
+@media screen and (max-width: 414px) {
+    .container {
+        margin: 15px auto;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .btn {
+        padding: 6px 14px;
+        font-size: 14px;
+    }
+}
+
+/* iPhone 14 Pro Max */
+@media screen and (max-width: 430px) {
+    .container {
+        margin: 20px auto;
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+    }
+}
+
+/* ============================================================================================
+   CSS BARU
+   ============================================================================================ */
+
+
+/* ==============================
+   WRAPPER & CARD
+   ============================== */
+.upload-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* biar tinggi penuh layar */
+    padding: 0 20px;   /* hapus padding besar supaya tetap di tengah */
+}
+
+
+.upload-card {
+    background-color: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    width: 100%;
+    padding: 40px 50px;
+    transition: transform 0.3s ease;
+}
+
+.upload-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ==============================
+   HEADER
+   ============================== */
+.upload-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.upload-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #145E32;
+}
+
+.upload-header .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+}
+
+/* ==============================
+   FORM
+   ============================== */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.modern-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #DDE3DA;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.modern-input:focus {
+    border-color: #145E32;
+    box-shadow: 0 0 0 3px rgba(20, 94, 50, 0.15);
+}
+
+/* ==============================
+   PREVIEW SECTION
+   ============================== */
+.preview-section {
+    text-align: center;
+}
+
+.preview-text {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.preview-box {
+    display: inline-block;
+    background: #f8f9f8;
+    border: 2px dashed #C5D5C0;
+    border-radius: 12px;
+    padding: 15px;
+    max-width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.preview-box:hover {
+    border-color: #145E32;
+}
+
+.preview-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* ==============================
+   BUTTON
+   ============================== */
+.btn-modern {
+    background-color: #145E32;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+}
+
+.btn-modern:hover {
+    background-color: #0f4a29;
+    transform: translateY(-1px);
+}
+
+/* ==============================
+   FLASH MESSAGES
+   ============================== */
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #EAF9EC;
+    color: #256A3D;
+    border: 1px solid #A6D9B0;
+}
+
+.alert-danger {
+    background-color: #FDECEC;
+    color: #A62A15;
+    border: 1px solid #F2B2A2;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+@media (max-width: 768px) {
+    .upload-card {
+        padding: 30px 25px;
+    }
+
+    .upload-header h1 {
+        font-size: 22px;
+    }
+
+    .btn-modern {
+        font-size: 15px;
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-wrapper {
+        padding: 40px 10px;
+    }
+
+    .upload-card {
+        padding: 25px 20px;
+    }
+
+    .upload-header h1 {
+        font-size: 20px;
+    }
+
+    .modern-input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .btn-modern {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}

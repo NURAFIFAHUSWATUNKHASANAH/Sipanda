@@ -1,0 +1,87 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<div class="overview">
+    <div class="title">
+        <i class="uil uil-files-landscapes"></i>
+        <span class="text">Tambah Data Hewan</span>
+    </div>
+
+    <div class="activity">
+        <form class="activity-form" enctype="multipart/form-data" method="POST" action="{{ url_for('tambahHewan') }}">
+            <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" id="nama" name="nama" placeholder="Masukkan nama hewan">
+            </div>
+            <div class="form-group">
+                <label for="nama_latin">Nama Latin</label>
+                <input type="text" id="nama_latin" name="nama_latin" placeholder="Masukkan nama latin">
+            </div>
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi</label>
+                <input type="text" id="deskripsi" name="deskripsi" placeholder="Masukkan deskripsi">
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" placeholder="Masukkan status hewan">
+            </div>
+            <div class="form-group">
+                <label for="populasi">Populasi</label>
+                <input type="number" id="populasi" name="populasi" placeholder="Masukkan jumlah populasi">
+            </div>
+            <div class="form-group">
+                <label for="habitat">Habitat</label>
+                <input type="text" id="habitat" name="habitat" placeholder="Masukkan habitat">
+            </div>
+
+            <div class="form-group" id="ciri-ciri-container">
+                <label for="ciri">Ciri-ciri</label>
+                <input type="text" name="ciri_ciri[]" class="form-control" placeholder="Masukkan ciri-ciri">
+            </div>
+            <button type="button" id="add-ciri" class="btn btn-secondary">Tambah Ciri-ciri</button>
+
+            <div class="form-group">
+                <label for="id_kategori">Category</label>
+                <select name="id_kategori" class="form-control" required>
+                    {% for kategori in kategoris %}
+                    <option value="{{ kategori.id_kategori }}">{{ kategori.nama_kategori }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="url_gambar">Tambahkan Gambar</label>
+                <div id="image-upload-container">
+                    <input type="file" name="url_gambar" accept="image/*" required>
+                </div>
+            </div>
+
+            <div class="form-group actions">
+                <button type="submit" class="save-btn">Simpan</button>
+                <button type="reset" class="cancel-btn">Batal</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Fungsi untuk menambahkan inputan ciri-ciri
+    document.getElementById('add-ciri').addEventListener('click', function() {
+        const container = document.getElementById('ciri-ciri-container');
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.name = 'ciri_ciri[]';  // Menyimpan input sebagai array
+        newInput.classList.add('form-control', 'mb-2');
+        newInput.placeholder = 'Masukkan ciri-ciri';
+        container.appendChild(newInput);
+    });
+</script>
+
+
+{% endblock %}
+

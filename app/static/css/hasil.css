@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+
+*, html {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 100px auto 40px;
+    padding: 0;
+}
+
+.card-content {
+    display: flex;
+    flex-wrap: wrap; /* Untuk memastikan elemen tetap rapi jika layar lebih kecil */
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card-image {
+    flex: 2;
+    width:  50%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ===== DETAIL HEWAN ===== */
+.result {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-width: 280px;
+}
+
+.result h2 {
+    margin-bottom: 15px;
+}
+
+.result .info p {
+    margin: 5px 0;
+}
+
+.species-name {
+    font-size: 26px;
+    font-weight: 600;
+    color: #145E32;
+    margin-bottom: 5px;
+}
+
+.latin-name {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.divider {
+    width: 50px;
+    height: 3px;
+    background-color: #145E32;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+/* ===== INFO ===== */
+.info-item {
+    margin-bottom: 12px;
+}
+
+.label {
+    font-weight: 600;
+    color: #222;
+    margin-right: 5px;
+}
+
+.value {
+    color: #444;
+}
+
+.status.protected {
+    color: #A62A15;
+    font-weight: 600;
+}
+
+.status.not-protected {
+    color: #145E32;
+    font-weight: 500;
+}
+
+.description {
+    margin-top: 5px;
+    color: #555;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+
+.card-actions {
+    display: flex;
+    flex-direction: column; /* Ubah arah menjadi kolom untuk layar kecil */
+    gap: 10px;
+    width: 100%;
+    padding: 20px;
+}
+
+.btn {
+  text-decoration: none; /* menghapus underline */
+  color: white; /* sesuaikan dengan warna tombol */
+      font-size: 14px;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-upload {
+    background-color: #145E32;
+    color: white;
+    padding: 10px 85px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    width: 100%; /* Sesuaikan lebar agar memenuhi container */
+    max-width: 400px; /* Batasi lebar maksimal */
+}
+
+.btn-upload:hover, .btn-report:hover {
+    background-color: #0f4a29;
+}
+
+.btn-report {
+    background-color: #A62A15;
+    color: white;
+    padding: 10px 85px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px; 
+    width: 100%; /* Sesuaikan lebar agar memenuhi container */
+    /* Batasi lebar maksimal */
+}
+
+.btn-report:hover {
+    background-color: #8C2411;
+}
+
+
+/* Media Queries untuk Responsivitas */
+@media (max-width: 768px) {
+    .card-content {
+        flex-direction: column; /* Atur ulang menjadi vertikal */
+        align-items: center; /* Pusatkan elemen */
+    }
+
+    .card-image {
+        max-width: 80%; /* Atur ulang lebar gambar agar lebih kecil */
+        height: auto; /* Sesuaikan tinggi secara otomatis */
+    }
+
+    .btn-upload, .btn-report {
+        padding: 10px 20px; /* Kurangi padding untuk perangkat kecil */
+        font-size: 12px; /* Sesuaikan ukuran font */
+    }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        margin-top: 50px;
+    }
+
+    .card-content {
+        gap: 10px; /* Kurangi jarak antar elemen */
+        padding: 10px; /* Kurangi padding untuk layar kecil */
+    }
+
+    .btn-upload, .btn-report {
+        font-size: 12px;
+        padding: 8px 15px;
+    }
+}

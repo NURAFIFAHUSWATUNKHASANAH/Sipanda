@@ -1,0 +1,494 @@
+/* ===== Halaman Data About (dataabout.css - versi duplikat dari profile-bksda.css) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+:root {
+    --warna-utama-dataabout: #014224;
+    --warna-hapus-dataabout: #c9302c;
+    --warna-hover-dataabout: #007a41;
+    --warna-hover-hapus-dataabout: #d9534f;
+    --warna-tabel-head: #ffffff;
+    --warna-tabel-border: #ddd;
+
+    /* Dark mode vars */
+    --warna-dasar-dark: #242526;
+    --warna-utama-dataabout-dark: #3A3B3C;
+    --warna-simpan-dataabout-dark: #979797;
+    --warna-hapus-dataabout-dark: #5d5d5d;
+    --warna-hover-dataabout-dark: #3A3B3C;
+    --warna-hover-hapus-dataabout-dark: #3A3B3C;
+    --warna-tabel-head-dark: #CCC;
+    --warna-tabel-border-dark: #4D4C4C;
+    --warna-text-dark: #CCC;
+    --warna-modal-body-dark: #3A3B3C;
+}
+
+/* ===== Layout Utama ===== */
+.dataabout-container {
+    background: #ffffff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.527);
+    font-size: 14px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+body.dark .dataabout-container {
+    background: var(--warna-dasar-dark);
+    color: var(--warna-text-dark);
+}
+
+.dataabout-container:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== Judul Halaman ===== */
+.dataabout-title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--warna-utama-dataabout);
+}
+
+body.dark .dataabout-title {
+    color: var(--warna-text-dark);
+}
+
+.dataabout-title i {
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+/* ===== Tombol Tambah ===== */
+.dataabout-button-container {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.dataabout-add-btn {
+    background: #014224;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dataabout-add-btn:hover {
+    transform: translateY(-2px);
+    background: #016d3a;
+}
+
+body.dark .dataabout-add-btn {
+    background: var(--warna-utama-dataabout-dark);
+    color: var(--warna-text-dark);
+}
+
+body.dark .dataabout-add-btn:hover {
+    background: var(--warna-hover-dataabout-dark);
+}
+
+/* ===== Table Custom ===== */
+.table-dataabout {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table-dataabout thead th {
+    background-color: #014224 !important;
+    color: #fff !important;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #e5e5e5;
+}
+
+/* Dark mode tabel */
+body.dark .table-dataabout,
+body.dark .table-dataabout thead,
+body.dark .table-dataabout tbody,
+body.dark .table-dataabout th,
+body.dark .table-dataabout td {
+    background-color: #3A3B3C !important;
+    color: #CCC !important;
+    border-color: #4D4C4C !important;
+}
+
+body.dark .table-dataabout thead th {
+    background-color: var(--warna-utama-dataabout-dark) !important;
+    color: var(--warna-tabel-head-dark) !important;
+    border: 1px solid var(--warna-tabel-border-dark);
+}
+
+/* Gaya Gambar */
+.table-img-dataabout {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Tombol Aksi Bulat */
+.dataabout-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.dataabout-btn-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dataabout-btn-circle.edit {
+    background-color: var(--warna-utama-dataabout);
+}
+
+.dataabout-btn-circle.edit:hover {
+    background-color: var(--warna-hover-dataabout);
+    transform: translateY(-2px);
+}
+
+.dataabout-btn-circle.delete {
+    background-color: var(--warna-hapus-dataabout);
+}
+
+.dataabout-btn-circle.delete:hover {
+    background-color: var(--warna-hover-hapus-dataabout);
+    transform: translateY(-2px);
+}
+
+body.dark .dataabout-btn-circle.edit {
+    background-color: var(--warna-utama-dataabout-dark);
+}
+
+body.dark .dataabout-btn-circle.delete {
+    background-color: var(--warna-hapus-dataabout-dark);
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .dataabout-add-btn {
+        font-size: 13px;
+        padding: 8px 14px;
+        height: 36px;
+    }
+
+    .dataabout-btn-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+
+    .table-img-dataabout {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ===== Modal Tambah/Edit ===== */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+body.dark .modal-content {
+    background-color: var(--warna-modal-body-dark);
+}
+
+.modal-header {
+    background-color: var(--warna-utama-dataabout);
+    color: #fff;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+}
+
+body.dark .modal-header {
+    background-color: var(--warna-utama-dataabout-dark);
+}
+
+.modal-body {
+    padding: 24px;
+    background-color: #fafafa;
+}
+
+body.dark .modal-body {
+    background-color: var(--warna-modal-body-dark);
+    color: var(--warna-text-dark);
+}
+
+.modal-body .form-group label {
+    font-weight: 500;
+    color: #014224;
+    margin-bottom: 6px;
+}
+
+.modal-body .form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+/* Tombol Simpan & Batal */
+.btn-success {
+    background-color: var(--warna-utama-dataabout);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.btn-success:hover {
+    background-color: var(--warna-hover-dataabout);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    border-radius: 8px;
+    padding: 8px 18px;
+    background-color: var(--warna-hapus-dataabout);
+    border: none;
+    transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #b3b3b3;
+    transform: translateY(-2px);
+}
+
+/* Gaya Card About */
+.dataabout-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.dataabout-card-header {
+    display: flex;
+    padding: 16px;
+    background-color: #f5f5f5;
+    position: relative;
+    gap: 16px;
+}
+
+.dataabout-card-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.dataabout-card-info {
+    flex: 1;
+}
+
+.dataabout-card-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #014224;
+}
+
+.dataabout-card-info p {
+    margin: 2px 0;
+    font-size: 14px;
+}
+
+.dataabout-card-actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.dataabout-card-body {
+    padding: 12px 16px;
+}
+
+body.dark .dataabout-card-header {
+    background-color: #3A3B3C;
+}
+
+body.dark .dataabout-card-info h4,
+body.dark .dataabout-card-info p {
+    color: #CCC;
+}
+
+/* ======== DARK MODE TAMBAHAN UNTUK MODAL ======== */
+
+/* Label form agar tidak tetap hijau di dark mode */
+body.dark .modal-body .form-group label {
+    color: var(--warna-tabel-head-dark) !important;
+}
+
+/* Field input/textarea agar gelap */
+body.dark .modal-body .form-control {
+    background-color: #2b2b2b !important;
+    color: var(--warna-text-dark) !important;
+    border: 1px solid var(--warna-tabel-border-dark) !important;
+}
+
+/* Tombol SIMPAN ikut gelap */
+body.dark .btn-success {
+    background-color: var(--warna-simpan-dataabout-dark);
+    color: #fff !important;
+    border: none !important;
+}
+
+body.dark .btn-success:hover {
+    background-color: var(--warna-hover-dataabout-dark);
+}
+
+/* Tombol BATAL ikut gelap */
+body.dark .btn-secondary {
+    background-color: var(--warna-hapus-dataabout-dark);
+    color: #fff !important;
+    border: none !important;
+}
+
+body.dark .btn-secondary:hover {
+    background-color: #999 !important;
+}
+
+/* Header modal biar teksnya kontras */
+body.dark .modal-header {
+    color: var(--warna-text-dark) !important;
+}
+
+
+/* ==============================
+   Input File di Modal Konservasi
+   ============================== */
+
+/* Style umum input file */
+.modal-body input[type="file"] {
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+/* === DARK MODE === */
+body.dark .modal-body input[type="file"] {
+    background-color: #3A3B3C; /* warna dasar dark */
+    color: #CCC; /* teks terang */
+    border: 1px solid #4D4C4C; /* garis lembut */
+}
+
+/* Hover & Focus (dark) */
+body.dark .modal-body input[type="file"]:hover,
+body.dark .modal-body input[type="file"]:focus {
+    border-color: #CCC;
+    box-shadow: 0 0 0 0.15rem rgba(204, 204, 204, 0.25);
+}
+
+/* Tombol “Choose File” (WebKit browser) */
+body.dark .modal-body input[type="file"]::-webkit-file-upload-button {
+    background-color: #3A3B3C;
+    color: #CCC;
+    border: 1px solid #4D4C4C;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover tombol choose file (dark mode) */
+body.dark .modal-body input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #4D4C4C;
+    color: #FFF;
+}
+
+/* ==============================
+   DARK MODE UNTUK SWEETALERT2
+============================== */
+body.dark .swal2-popup {
+    background-color: #2b2b2b !important;
+    color: #f1f1f1 !important;
+    border: 1px solid #4D4C4C;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+body.dark .swal2-title {
+    color: #f1f1f1 !important;
+}
+
+body.dark .swal2-html-container {
+    color: #dcdcdc !important;
+}
+
+body.dark .swal2-confirm {
+    background-color: #3A3B3C !important;
+    color: #fff !important;
+    border: 1px solid #4D4C4C !important;
+}
+
+body.dark .swal2-confirm:hover {
+    background-color: #4D4C4C !important;
+}
+
+body.dark .swal2-cancel {
+    background-color: #5a1e1e !important;
+    color: #fff !important;
+    border: 1px solid #4D4C4C !important;
+}
+
+body.dark .swal2-cancel:hover {
+    background-color: #7a2e2e !important;
+}
+
+body.dark .swal2-icon {
+    border-color: #999 !important;
+}
+
+body.dark .swal2-icon.swal2-success [class^='swal2-success-line'],
+body.dark .swal2-icon.swal2-success [class*=' swal2-success-line'] {
+    background-color: #4caf50 !important;
+}
+
+body.dark .swal2-icon.swal2-error {
+    border-color: #f44336 !important;
+    color: #f44336 !important;
+}
+
+body.dark .swal2-icon.swal2-warning {
+    border-color: #ff9800 !important;
+    color: #ff9800 !important;
+}

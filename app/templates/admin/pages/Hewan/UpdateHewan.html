@@ -1,0 +1,97 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<div class="overview">
+    <div class="title">
+        <i class="uil uil-files-landscapes"></i>
+        <span class="text">Edit Data Hewan</span>
+    </div>
+
+    <div class="activity">
+        <form class="activity-form" enctype="multipart/form-data" method="POST" action="{{ url_for('editHewans', id_hewan=hewan.id_hewan) }}">
+            <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" id="nama" name="nama" placeholder="Masukkan nama hewan" value="{{ hewan.nama }}">
+            </div>
+
+            <div class="form-group">
+                <label for="nama_latin">Nama Latin</label>
+                <input type="text" id="nama_latin" name="nama_latin" placeholder="Masukkan nama latin" value="{{ hewan.nama_latin }}">
+            </div>
+
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi</label>
+                <input type="text" id="deskripsi" name="deskripsi" placeholder="Masukkan deskripsi" value="{{ hewan.deskripsi }}">
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" placeholder="Masukkan status hewan" value="{{ hewan.status }}">
+            </div>
+
+            <div class="form-group">
+                <label for="populasi">Populasi</label>
+                <input type="number" id="populasi" name="populasi" placeholder="Masukkan jumlah populasi" value="{{ hewan.populasi }}">
+            </div>
+
+            <div class="form-group">
+                <label for="habitat">Habitat</label>
+                <input type="text" id="habitat" name="habitat" placeholder="Masukkan habitat" value="{{ hewan.habitat }}">
+            </div>
+
+            <!-- Ciri-ciri Dinamis -->
+            <div class="form-group" id="ciri-ciri-container">
+                <label for="ciri">Ciri-ciri</label>
+                {% for ciri in hewan.ciri_ciri %}
+                <input type="text" name="ciri_ciri[]" class="form-control mb-2" placeholder="Masukkan ciri-ciri" value="{{ ciri.ciri }}">
+                {% endfor %}
+            </div>
+            <button type="button" id="add-ciri" class="btn btn-secondary">Tambah Ciri-ciri</button>
+
+            <div class="form-group">
+                <label for="id_kategori">Kategori</label>
+                <select name="id_kategori" class="form-control" required>
+                    {% for kategori in kategoris %}
+                    <option value="{{ kategori.id_kategori }}" {% if hewan.id_kategori == kategori.id_kategori %}selected{% endif %}>
+                        {{ kategori.nama_kategori }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="url_gambar">Tambahkan Gambar</label>
+                <div id="image-upload-container">
+                    <input type="file" name="url_gambar" accept="image/*">
+                    {% if hewan.url_gambar %}
+                    <div class="mt-2">
+                        <img src="static/gambarUser/{{ hewan.url_gambar }}" alt="Gambar Hewan" style="max-height: 200px;">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group actions">
+                <button type="submit" class="save-btn">Perbarui</button>
+                <a href="#" class="cancel-btn">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Fungsi untuk menambahkan inputan ciri-ciri
+    document.getElementById('add-ciri').addEventListener('click', function() {
+        const container = document.getElementById('ciri-ciri-container');
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.name = 'ciri_ciri[]';  // Menyimpan input sebagai array
+        newInput.classList.add('form-control', 'mb-2');
+        newInput.placeholder = 'Masukkan ciri-ciri';
+        container.appendChild(newInput);
+    });
+</script>
+{% endblock %}

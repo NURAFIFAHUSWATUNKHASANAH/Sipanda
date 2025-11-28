@@ -1,0 +1,25 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<div class="edit-laporan-container">
+    <div class="title">
+        <i class="uil uil-edit"></i>
+        <span class="text">Verifikasi Laporan</span>
+    </div>
+
+    <form action="{{ url_for('update_laporan', laporan_id=laporan.id) }}" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="status">Status Laporan</label>
+            <select name="status" id="status" class="form-control" required>
+                <option value="verifikasi" {% if laporan.status == 'verifikasi' %}selected{% endif %}>Verifikasi</option>
+                <option value="sedang_di_proses" {% if laporan.status == 'sedang_di_proses' %}selected{% endif %}>Sedang Diproses</option>
+                <option value="selesai_di_proses" {% if laporan.status == 'selesai_di_proses' %}selected{% endif %}>Selesai Diproses</option>
+                <option value="tidak_valid" {% if laporan.status == 'tidak_valid' %}selected{% endif %}>Tidak Valid</option>
+            </select>
+        </div>
+        <div class="button-container">
+        <button type="submit" class="add-data-btn">Simpan</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

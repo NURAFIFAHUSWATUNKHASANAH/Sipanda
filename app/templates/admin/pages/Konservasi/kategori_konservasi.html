@@ -1,0 +1,261 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/jeniskonservasi.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<div class="jeniskawasan-container">
+    <div class="jeniskawasan-title">
+        <i class="uil uil-list-ul"></i>
+        <span>Kelola Jenis Kawasan Konservasi</span>
+    </div>
+
+    <!-- Tombol Tambah -->
+    <div class="jeniskawasan-button-container">
+        <button class="jeniskawasan-add-btn" data-toggle="modal" data-target="#tambahJeniskawasanModal">
+            Tambah
+        </button>
+    </div>
+
+    <div class="table-responsive-jeniskawasan">
+        <table id="jeniskawasanTable" class="table table-jeniskawasan" data-toggle="table" data-search="true"
+            data-show-columns="true" data-show-refresh="true" data-pagination="true"
+            data-page-list="[5, 10, 20, 50, 100]" data-show-export="true" data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-jeniskawasan"}'>
+            <thead>
+                <tr>
+                    <th data-field="no" data-sortable="true">No</th>
+                    <th data-field="nama" data-sortable="true">Nama Kawasan</th>
+                    <th data-field="deskripsi">Deskripsi</th>
+                    <th data-field="aksi">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td data-export-text="{{ item.nama }}">{{ item.nama }}</td>
+                    <td data-export-text="{{ item.deskripsi }}">{{ item.deskripsi[:40] }}...</td>
+                    <td>
+                        <div class="jeniskawasan-action-buttons">
+                            <button class="jeniskawasan-btn-circle edit" data-id="{{ item.id }}"
+                                data-nama="{{ item.nama }}" data-deskripsi="{{ item.deskripsi }}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <form action="{{ url_for('delete_jenis_kawasan', id=item.id) }}" method="POST"
+                                class="delete-form d-inline">
+                                <button type="button" class="jeniskawasan-btn-circle delete" data-id="{{ item.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL TAMBAH -->
+<div class="modal fade" id="tambahJeniskawasanModal" tabindex="-1" role="dialog"
+    aria-labelledby="tambahJeniskawasanModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-jeniskawasan">
+            <div class="modal-header modal-header-jeniskawasan">
+                <h5 class="modal-title" id="tambahJeniskawasanModalLabel">Tambah Jenis Kawasan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="formTambahJeniskawasan" method="POST" action="{{ url_for('create_jenis_kawasan') }}">
+                <div class="modal-body modal-body-jeniskawasan">
+                    <div class="form-group">
+                        <label for="nama">Nama Kawasan</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDIT FIX -->
+<div class="modal fade" id="editJeniskawasanModal" tabindex="-1" role="dialog"
+    aria-labelledby="editJeniskawasanModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-jeniskawasan">
+            <div class="modal-header modal-header-jeniskawasan">
+                <h5 class="modal-title" id="editJeniskawasanModalLabel">Edit Jenis Kawasan</h5>
+                <!-- Tombol close normal -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="formEditJeniskawasan" method="POST">
+                <input type="hidden" id="edit_id" name="id">
+                <div class="modal-body modal-body-jeniskawasan">
+                    <div class="form-group">
+                        <label for="edit_nama">Nama Kawasan</label>
+                        <input type="text" class="form-control" id="edit_nama" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_deskripsi">Deskripsi</label>
+                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"
+                            required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Tombol Batal normal -->
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Tombol edit click
+        $(document).on('click', '.edit', function () {
+            var btn = $(this);
+            $('#edit_id').val(btn.data('id'));
+            $('#edit_nama').val(btn.data('nama'));
+            $('#edit_deskripsi').val(btn.data('deskripsi'));
+            $('#formEditJeniskawasan').attr('action', '/admin/jenis_kawasan/update/' + btn.data('id'));
+            $('#editJeniskawasanModal').modal('show');
+        });
+
+
+        // ================= Tambah Data =================
+        $('#formTambahJeniskawasan').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#tambahJeniskawasanModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil ditambahkan.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        // ================= Edit Data =================
+        // Submit form edit via AJAX
+        $('#formEditJeniskawasan').on('submit', function (e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: '/admin/jenis_kawasan/update/' + id,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#editJeniskawasanModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data diperbarui.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        // Reset form saat modal ditutup
+        $('#editJeniskawasanModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+        });
+
+        // Tombol close dan batal manual
+        $('#editJeniskawasanModal .close, #editJeniskawasanModal .btn-secondary').click(function () {
+            $('#editJeniskawasanModal').modal('hide');
+        });
+
+        // Tombol Hapus
+        $('.delete').click(function (e) {
+            e.preventDefault();
+            var form = $(this).closest('.delete-form');
+            var actionUrl = form.attr('action');
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(actionUrl, function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Terhapus!',
+                            text: 'Data berhasil dihapus.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    });
+                }
+            });
+        });
+
+        // Export PDF
+        function exportPDF() {
+            var doc = new jsPDF('p', 'pt', 'a4');
+            var rows = [];
+            $('#jeniskawasanTable tbody tr').each(function () {
+                var row = [];
+                $(this).find('td').each(function () {
+                    var txt = $(this).attr('data-export-text') || $(this).text();
+                    row.push(txt);
+                });
+                rows.push(row);
+            });
+            var columns = [];
+            $('#jeniskawasanTable thead th').each(function () { columns.push($(this).text()); });
+            doc.autoTable({
+                head: [columns],
+                body: rows,
+                startY: 20,
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [1, 66, 36], textColor: 255 }
+            });
+            doc.save('data-jeniskawasan.pdf');
+        }
+    });
+</script>
+{% endblock %}

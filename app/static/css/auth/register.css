@@ -1,0 +1,218 @@
+/* ======== GENERAL STYLING ======== */
+body {
+    background-color: #EEEEE4;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ======== CARD STYLING ======== */
+.card-container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 900px;
+    width: 90%;
+    gap: 30px;
+}
+
+/* ======== CARD IMAGE RESPONSIVE ======== */
+.card-container img {
+    display: none; /* default: sembunyikan */
+}
+
+/* Tampilkan gambar hanya di layar besar (desktop) */
+@media (min-width: 992px) {
+    .card-container img {
+        display: block;
+        max-width: 400px; /* ukuran desktop */
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        object-fit: contain;
+    }
+}
+
+/* ======== RESPONSIVE STYLING ======== */
+@media (max-width: 992px) {
+    .card-container {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+        align-items: center; /* pastikan form tetap center */
+        justify-content: center;
+    }
+
+    .login-container {
+        max-width: 100%;
+        width: 100%; /* form full-width saat gambar disembunyikan */
+    }
+}
+
+@media (max-width: 400px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .form-control,
+    .btn-success,
+    .btn-google {
+        height: 45px;
+        font-size: 14px;
+        min-width: 250px; /* tambahkan ini agar field tidak terlalu kecil */
+    }
+
+    .google-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Form dalam card */
+.login-container {
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tulisan SIPANDA di dalam form */
+.logo-text-in-form {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.logo-text-in-form .si {
+    color: #004400; /* warna hijau untuk "SI" */
+}
+
+.logo-text-in-form .panda {
+    color: brown; /* warna coklat untuk "PANDA" */
+}
+
+/* Biarkan text-align kiri */
+.login-container.text-start {
+    text-align: left;
+}
+
+p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* ======== SAMAKAN UKURAN FIELD DAN TOMBOL ======== */
+.form-control,
+.btn-success,
+.btn-google {
+    height: 50px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+/* Input form */
+.form-control {
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px; /* jarak antar field */
+}
+
+/* Lupa password jarak */
+.bpa.lupa-password {
+    margin-bottom: 20px; /* jarak ke tombol Masuk */
+}
+
+/* Tombol submit */
+.btn-success {
+    background-color: #004400;
+    border: none;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.btn-success:hover {
+    background-color: #003300;
+}
+
+/* Tombol Google */
+.btn-google {
+    background-color: #D9D9D9;
+    border: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.btn-google:hover {
+    background-color: #BEBEBE;
+}
+
+/* Ikon Google menggunakan SVG inline */
+.google-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Link dan teks kecil */
+.bpa {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* ======== RESPONSIVE STYLING ======== */
+@media (max-width: 992px) {
+    .card-container {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .card-container img {
+        max-width: 80%;
+    }
+
+    .login-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .form-control,
+    .btn-success,
+    .btn-google {
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .google-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+}

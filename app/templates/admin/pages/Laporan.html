@@ -1,0 +1,247 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<!-- ========== IMPORT CSS & JS ========== -->
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/datalaporan.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<!-- ========== HEADER DAN STATISTIK LAPORAN ========== -->
+<div class="laporan-container">
+    <div class="laporan-title">
+        <i class="uil uil-files-landscapes"></i>
+        <span>Data Laporan</span>
+    </div>
+
+    <div class="boxes">
+        <div class="box box1">
+            <i class="uil uil-share"></i>
+            <span class="text">Total Laporan</span>
+            <span class="number">{{ laporan_data|length }}</span>
+        </div>
+        <div class="box box2">
+            <i class="uil uil-comments"></i>
+            <span class="text">Laporan Proses</span>
+            <span class="number">{{ laporan_proses }}</span>
+        </div>
+        <div class="box box3">
+            <i class="uil uil-thumbs-up"></i>
+            <span class="text">Laporan Selesai</span>
+            <span class="number">{{ laporan_selesai }}</span>
+        </div>
+    </div>
+
+    <!-- ========== TABEL DATA LAPORAN ========== -->
+    <div class="table-responsive mt-4">
+        <table id="laporanTable" class="table table-laporan" data-toggle="table" data-search="true"
+            data-show-columns="true" data-show-refresh="true" data-pagination="true" data-page-list="[5,10,20,50,100]"
+            data-show-export="true" data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-laporan"}' data-pagination-pre-text="‹"
+            data-pagination-next-text="›">
+            <thead>
+                <tr>
+                    <th data-field="no" data-sortable="true">No</th>
+                    <th data-field="nama">Nama Lengkap</th>
+                    <th data-field="nohp">No HP</th>
+                    <th data-field="alamat">Alamat</th>
+                    <th data-field="maps">Maps</th>
+                    <th data-field="keterangan" data-visible="false">Keterangan</th>
+                    <th data-field="gambar">Gambar Laporan</th>
+                    <th data-field="bukti">Bukti Penindakan</th>
+                    <th data-field="status">Status</th>
+                    <th data-field="aksi">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for laporan in laporan_data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ laporan.nama_lapor }}</td>
+                    <td>{{ laporan.nomer_hp }}</td>
+                    <td>{{ laporan.alamat }}</td>
+                    <td>
+                        {% if laporan.maps %}
+                        <a href="https://www.google.com/maps?q={{ laporan.maps }}" target="_blank">
+                            <i class="fa fa-map-marker-alt"></i> Lihat Peta
+                        </a>
+                        {% else %}
+                        <span>Tidak tersedia</span>
+                        {% endif %}
+                    </td>
+                    <td data-export-text="{{ laporan.keterangan }}">
+                        {{ laporan.keterangan[:30] }}{% if laporan.keterangan|length > 30 %}...{% endif %}
+                    </td>
+                    <td>
+                        {% if laporan.file_url %}
+                        <a href="{{ url_for('static', filename=laporan.file_url) }}" target="_blank">
+                            <img src="{{ url_for('static', filename=laporan.file_url) }}" class="table-img">
+                        </a>
+                        {% else %}
+                        <span>-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if laporan.gambar_bukti %}
+                        {% for bukti in laporan.gambar_bukti %}
+                        <a href="{{ url_for('static', filename=bukti.nama) }}" target="_blank">
+                            <img src="{{ url_for('static', filename=bukti.nama) }}" class="table-img">
+                        </a>
+                        {% endfor %}
+                        {% else %}
+                        <span>-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if laporan.status == "selesai_di_proses" %}
+                        <span class="badge badge-success">Selesai</span>
+                        {% elif laporan.status == "sedang_di_proses" %}
+                        <span class="badge badge-warning">Proses</span>
+                        {% elif laporan.status == "terverifikasi" %}
+                        <span class="badge badge-info">Terverifikasi</span>
+                        {% else %}
+                        <span class="badge badge-secondary">{{ laporan.status.replace("_", " ")|capitalize }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="laporan-btn-circle edit" data-toggle="modal" data-target="#editModal"
+                            data-id="{{ laporan.id }}" data-status="{{ laporan.status }}">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- MODAL EDIT LAPORAN -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="editLaporanForm" method="POST" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Verifikasi Laporan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="statusModal">Status Laporan</label>
+                        <select name="status" id="statusModal" class="form-control" required>
+                            <option value="verifikasi">Verifikasi</option>
+                            <option value="sedang_di_proses">Sedang Diproses</option>
+                            <option value="selesai_di_proses">Selesai Diproses</option>
+                            <option value="tidak_valid">Tidak Valid</option>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="bukti_penindakan">Upload Bukti Penindakan</label>
+                        <input type="file" name="bukti_penindakan" class="form-control" id="bukti_penindakan">
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="laporan-add-btn">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ========== SCRIPT EKSPOR TABEL ========== -->
+<script>
+    $('.export').click(function () {
+        var type = $(this).data('type');
+        var $table = $('#laporanTable');
+
+        $table.find('tbody tr').each(function () {
+            $(this).find('td').each(function () {
+                var exportText = $(this).attr('data-export-text');
+                if (exportText !== undefined) {
+                    $(this).attr('data-original-text', $(this).html());
+                    $(this).text(exportText);
+                }
+            });
+        });
+
+        $table.tableExport({ type: type, fileName: 'data-laporan' });
+
+        $table.find('tbody tr').each(function () {
+            $(this).find('td').each(function () {
+                var originalText = $(this).attr('data-original-text');
+                if (originalText !== undefined) {
+                    $(this).html(originalText);
+                    $(this).removeAttr('data-original-text');
+                }
+            });
+        });
+    });
+</script>
+
+<!-- ========== SCRIPT SWEETALERT UNTUK HAPUS ========== -->
+<script>
+    $(document).on('click', '.delete', function (e) {
+        e.preventDefault();
+        const form = $(this).closest('.delete-form');
+        const actionUrl = form.attr('action');
+
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data ini akan dihapus secara permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: actionUrl,
+                    type: 'POST',
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data laporan berhasil dihapus.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    },
+                    error: function () {
+                        Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Mengisi data modal saat tombol edit diklik
+        $('#editModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var laporanId = button.data('id');
+            var status = button.data('status');
+
+            var modal = $(this);
+            modal.find('form').attr('action', '/update_laporan/' + laporanId);
+            modal.find('#statusModal').val(status);
+            modal.find('#bukti_penindakan').val(''); // reset file input
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,429 @@
+{% extends "/layout/layout.html" %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<div class="Jumborton" id="Jumborton">
+  <div class="bagianContent">
+    <div class="contentText">
+      {% if jumbotron %}
+      <h1>{{ jumbotron.title|safe }}</h1>
+      <p>{{ jumbotron.subtitle }}</p>
+      {% else %}
+      <h1>AYO<br>LINDUNGI</h1>
+      <p>Jelajahi dan pelajari lebih lanjut tentang hewan-hewan yang terancam punah dan dilindungi. Mari bersama-sama
+        menjaga kelestarian spesies langka dan membantu upaya konservasi mereka.</p>
+      {% endif %}
+    </div>
+
+    <!-- START: BAGIAN UNTUK GAMBAR SLIDE DI JUMBROTON -->
+    <div class="bagianGambarPilih">
+      <div class="iconPilihG">
+        {% for img in images %}
+        <div class="imgPG" datajm="url('{{ url_for('static', filename='img/' + img.filename) }}')">
+          <img src="{{ url_for('static', filename='img/' + img.filename) }}" alt="Jumbotron Image">
+          <form action="{{ url_for('delete_jumbotron_image', id=img.id) }}" method="POST" style="display:inline;">
+            <!-- <button type="submit" class="cancel-btn">Hapus</button> -->
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="iconPilih">
+        <div class="btnAr" id="prevBtn"></div>
+        <div class="ila-container">
+          <div class="ila"></div>
+          <div class="ila"></div>
+          <div class="ila"></div>
+        </div>
+        <div class="btnAr" id="nextBtn"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK TENTANG -->
+
+  {% if about %} <div class="tentangKontainer" id="tentang">
+    <div class="bagianGmbr"> {% if about.image %} <img
+        src="{{ url_for('static', filename='gambarUser/' + about.image) }}" alt="About Image"> {% else %} <img
+        src="{{ url_for('static', filename='img/ilTentang.png') }}" alt="Default About Image"> {% endif %} </div>
+    <div class="bagianText">
+      <h1>{{ about.title }}</h1>
+      <p>{{ about.description }}</p>
+    </div>
+  </div>
+  {% else %}
+  <div class="tentangKontainer" id="tentang" style="border: 2px solid red; padding: 10px;">
+    <h1 style="color:red;">DEBUG: Data About kosong!</h1>
+    <p>Pastikan tabel About di database memiliki minimal satu record.</p>
+  </div>
+  {% endif %}
+
+  <!-- START: BAGIAN UNTUK PROFIL BKSDA -->
+  <div class="bksda-profile-container" id="bksda-profile">
+    <div class="bksda-header">
+      <h1>{{ bksda_profile.judul if bksda_profile else "Profil BKSDA" }}</h1>
+      <p>{{ bksda_profile.deskripsi if bksda_profile else "Informasi lengkap mengenai Balai Konservasi Sumber Daya
+        Alam." }}</p>
+    </div>
+
+    <div class="bksda-content">
+      <div class="bksda-image-section">
+        {% if bksda_profile and bksda_profile.gambar %}
+        <img src="{{ url_for('static', filename='gambarUser/' + bksda_profile.gambar) }}"
+          alt="Gambar {{ bksda_profile.judul }}" class="bksda-main-image">
+        <p class="image-caption">Gambar Profil {{ bksda_profile.judul }}</p>
+        {% else %}
+        <img src="{{ url_for('static', filename='img/gedung_bksda.png') }}" alt="Gedung BKSDA Jawa Tengah"
+          class="bksda-main-image">
+        <p class="image-caption">Gedung Kantor Balai KSDA</p>
+        {% endif %}
+      </div>
+
+      <div class="bksda-info-section">
+        <div class="info-card">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>Alamat Kantor</h3>
+          <p>{{ bksda_profile.alamat if bksda_profile else "-" }}</p>
+        </div>
+        <div class="info-card">
+          <i class="fas fa-phone"></i>
+          <h3>Telepon & Email</h3>
+          <p>Telepon: {{ bksda_profile.telepon if bksda_profile and bksda_profile.telepon else "-" }}</p>
+          <p>Email: {{ bksda_profile.email if bksda_profile and bksda_profile.email else "-" }}</p>
+        </div>
+        <div class="info-card">
+          <i class="fas fa-user-tie"></i>
+          <h3>Kepala Balai</h3>
+          <p>{{ bksda_profile.kepala_balai if bksda_profile and bksda_profile.kepala_balai else "-" }}</p>
+        </div>
+        <div class="info-card full-width">
+          <i class="fas fa-bullseye"></i>
+          <h3>Visi & Misi</h3>
+          <h4>Visi:</h4>
+          <p>{{ bksda_profile.visi if bksda_profile and bksda_profile.visi else "-" }}</p>
+          <h4>Misi:</h4>
+          {% if bksda_profile and bksda_profile.misi %}
+          <p>{{ bksda_profile.misi }}</p>
+          {% else %}
+          <p>-</p>
+          {% endif %}
+        </div>
+        <div class="info-card">
+          <i class="fas fa-clock"></i>
+          <h3>Jam Operasional</h3>
+          <p>{{ bksda_profile.jam_operasional if bksda_profile and bksda_profile.jam_operasional else "-" }}</p>
+        </div>
+        <div class="info-card full-width">
+          <i class="fas fa-info-circle"></i>
+          <h3>Informasi</h3>
+          <p>{{ bksda_profile.informasi if bksda_profile and bksda_profile.informasi else "-" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- START: BAGIAN UNTUK UNIT KERJA -->
+  <div class="unit-kerja-container" id="unit-kerja">
+    <div class="bgnText">
+      <h1 class="unit-header">Seksi Konservasi Wilayah</h1>
+      <p>Daftar Seksi Konservasi Wilayah yang tersebar di Jawa Tengah.</p>
+    </div>
+
+    <div class="unit-kerja-grid">
+      {% for unit in unit_kerja_data %}
+      <div class="unit-card">
+        <!-- Header Kartu -->
+        <div class="unit-header-card">
+          <h3>{{ unit.nama }}</h3>
+          <p>{{ unit.kabupaten }}</p>
+        </div>
+
+        <!-- Kontak & Info Utama -->
+        <div class="unit-contact-info">
+          <div class="contact-row">
+            <i class="fas fa-user-circle"></i>
+            <span><strong>Kepala Resor:</strong> {{ unit.kepala_resor or 'Tidak Tersedia' }}</span>
+          </div>
+          <div class="contact-row">
+            <i class="fas fa-globe-asia"></i>
+            <span><strong>Wilayah Kerja:</strong> {{ unit.wilayah_kerja or '-' }}</span>
+          </div>
+          <div class="contact-row">
+            <i class="fas fa-map-marker-alt"></i>
+            <span><strong>Alamat:</strong> {{ unit.alamat }}</span>
+          </div>
+          <div class="contact-row">
+            <i class="fas fa-phone"></i>
+            <span><strong>Call Center:</strong> <a href="tel:{{ unit.telepon }}">{{ unit.telepon }}</a></span>
+          </div>
+          <div class="contact-row">
+            <i class="fas fa-envelope"></i>
+            <span><strong>Email:</strong> <a href="mailto:{{ unit.email }}">{{ unit.email }}</a></span>
+          </div>
+          {% if unit.kode_resor %}
+          <div class="contact-row">
+            <i class="fas fa-id-badge"></i>
+            <span><strong>Kode Resor:</strong> {{ unit.kode_resor }}</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Modal Peta -->
+        <div class="modal fade" id="mapModal{{ unit.id }}" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">{{ unit.nama }} - Peta Lokasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <iframe src="{{ unit.peta_lokasi }}" width="100%" height="400" style="border:0;" allowfullscreen
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if not unit_kerja_data %}
+      <p>Tidak ada data unit kerja aktif yang ditemukan untuk ditampilkan.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK DATA HEWAN -->
+  <div class="bagianDataGrafik" id="dataHewan">
+    <div class="bgnText">
+      <h1>Data Hewan</h1>
+      <p>Kumpulan informasi hewan yang di lindungi di indonesia</p>
+    </div>
+    <div class="bagianCardData">
+      {% for hewan in hewans %}
+      <div class="cardData">
+        <div class="imgCardD">
+          <img src="{{ url_for('static', filename='gambarUser/' + hewan.url_gambar) }}" alt="{{ hewan.nama }}">
+        </div>
+        <h1>{{ hewan.nama }}</h1>
+        <div class="btnCardD">
+          <a href="{{ url_for('pindahHalaman', id_hewan=hewan.id_hewan) }}">Lihat</a>
+        </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK KAWASAN KONSERVASI -->
+  <div class="bagianDataGrafik" id="dataKawasan">
+    <div class="bgnText">
+      <h1>Data Kawasan Konservasi</h1>
+      <p>Kumpulan informasi kawasan konservasi di Indonesia</p>
+    </div>
+    <div class="bagianCardData">
+      {% for kawasan in kawasans %}
+      <div class="cardData">
+        <div class="imgCardD">
+          {% if kawasan.foto %}
+          <img src="{{ url_for('static', filename='gambarKawasan/' + kawasan.foto) }}" alt="{{ kawasan.nama }}"
+            class="img-fluid">
+          {% else %}
+          <img src="{{ url_for('static', filename='gambarKawasan/default.jpg') }}" alt="No Image" class="img-fluid">
+          {% endif %}
+        </div>
+        <h1 title="{{ kawasan.nama }}">{{ kawasan.nama }}</h1> <!-- Sama style seperti Balai Konservasi -->
+        <div class="btnCardD">
+          <a href="{{ url_for('detail_kawasan', id=kawasan.id) }}" class="btn btn-info btn-sm">Detail</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK FITUR -->
+  <div class="baganFitur" id="fitur">
+    <div class="gambarFTR">
+      <div class="imgFTR kecil">
+
+        <img src="/static/img/in.jpg" alt="">
+
+      </div>
+      <div class="imgFTR sedang">
+        <img src="/static/img/en.jpg" alt="">
+      </div>
+      <div class="imgFTR besar">
+        <img src="/static/img/un.jpg" alt="">
+      </div>
+    </div>
+
+    <div class="textFitur">
+      <h2>Fitur</h2>
+      <h1>Apa saja yang ada di SIPANDA?</h1>
+      <p>SIPANDA akan memberikan fitur <br>yang bermanfaat untuk anda</p>
+      <a href="/scan" class="fiturCrd" onclick="toggleDropdown('desc1')">
+        <img src="/static/img/icon.png" alt="">
+        <h1>Deteksi Gambar</h1>
+      </a>
+      <a href="/chatbot" class="fiturCrd">
+        <img src="/static/img/icon.png" alt="">
+        <h1>Chat Bot</h1>
+      </a>
+      <a href="/lapor" class="fiturCrd">
+        <img src="/static/img/icon.png" alt="">
+        <h1>Lapor</h1>
+      </a>
+    </div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK DATA BALAI KONSERVASI -->
+  <div class="bagianDataGrafik" id="databalai">
+    <div class="bgnText">
+      <h1>Data Balai Konservasi</h1>
+      <p>Kumpulan informasi Balai Konservasi</p>
+    </div>
+    <div class="bagianCardData">
+      {% for balai in balais %}
+      <div class="cardData">
+        <div class="imgCardD">
+          <img src="{{ url_for('static', filename='gambarUser/' + balai.gambarbalai) }}" alt="{{ balai.nama_balai }}">
+        </div>
+        <h1 title="{{ balai.nama_balai }}">{{ balai.nama_balai }}</h1>
+        <div class="btnCardD">
+          <a href="{{ url_for('pindahHalamanBalai', id_balaikonservasi=balai.id_balaikonservasi) }}">Lihat</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="bagianMaps" id="maps">
+    <h2>Maps</h2>
+    <h1>Balai Konservasi</h1>
+    <p>Menunjukan Balai Konservarsi yang ada di indonesia.</p>
+    <div id="map" class="maps"></div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK BERITA -->
+  <div class="bagianDataGrafikBerita">
+    <h1 class="title-berita">Berita Terbaru</h1>
+    <div class="container-berita">
+      <div class="card-grid-berita">
+        {% for item in news %}
+        <div class="news-card">
+          <img src="{{ url_for('static', filename='gambarUser/' + item['gambar']) }}" alt="Gambar Berita"
+            class="news-image">
+          <div class="news-content">
+            <h3 class="news-title">{{ item['judul'][:50] }}...</h3>
+            <p class="news-date">Tanggal: <em>{{ item['tanggal'] }}</em></p>
+            <!-- <p class="news-summary">{{ item.konten [:50] }}...</p> -->
+            <a href="{{ url_for('pindahHalamanBerita', id_berita=item.id) }}" class="read-more">Baca Selengkapnya</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- START: BAGIAN UNTUK KOMENTAR -->
+  <div class="container-fluid py-4">
+    <div class="card">
+      <div class="card-header">Berikan Komentar Anda!</div>
+      <div class="card-body">
+        <form action="{{ url_for('komenTambah') }}" method="POST">
+          <div class="mb-3">
+            <textarea name="comment" id="comment" class="form-control" placeholder="Masukkan komentar Anda..." rows="4"
+              required></textarea>
+          </div>
+          <button type="submit" class="btn btn-submit btn-primary" id="submitButton">Kirim</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-container" id="faq">
+    <h1>Pertanyaan Umum</h1>
+    <div class="faq-item">
+      <h3>Apakah semua hewan di Indonesia dilindungi?</h3>
+      <p>Tidak, hanya hewan yang terdaftar sebagai dilindungi oleh pemerintah...</p>
+    </div>
+    <div class="faq-item">
+      <h3>Bagaimana cara melaporkan pelanggaran konservasi?</h3>
+      <p>Gunakan fitur <strong>Lapor</strong> di SIPANDA atau hubungi balai terdekat.</p>
+    </div>
+  </div>
+
+
+  {% endblock %}
+
+  {% block scripts %}
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    // Buat map
+    var map = L.map('map').setView([-3.0060, 115.6155], 4);
+    var mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; ' + mapLink + ' Contributors',
+      maxZoom: 18,
+    }).addTo(map);
+
+    // Ambil data dari Flask balais
+    var planes = [
+      {% for balai in balais %}
+    {
+      name: { { balai.nama_balai | tojson } },
+      lat: { { balai.latitude | tojson } },
+      lng: { { balai.longitude | tojson } },
+      description: { { balai.deskripsi | tojson } },
+      image: { { url_for('static', filename = 'gambarUser/' + balai.gambarbalai) | tojson } }
+    } {% if not loop.last %}, {% endif %}
+    {% endfor %}
+];
+
+    // Tambahkan marker
+    for (var i = 0; i < planes.length; i++) {
+      (function (i) {
+        var marker = new L.marker([planes[i].lat, planes[i].lng])
+          .bindPopup(
+            "<img src='" + planes[i].image + "' class='popup-image'><br>" +
+            "<b>" + planes[i].name + "</b><br>" +
+            planes[i].description + "<br>" +
+            "<button style='font-size:12px;padding:2px 6px;margin-top:5px;' onclick='zoomOut()'>Close</button>",
+            { className: 'custom-popup' }
+          ).addTo(map);
+
+        marker.on('click', function () {
+          map.flyTo([planes[i].lat, planes[i].lng], 12, {
+            animate: true,
+            duration: 1.5
+          });
+          marker.openPopup();
+        });
+      })(i);
+    }
+
+    function zoomOut() {
+      map.flyTo([-3.0060, 115.6155], 4, {
+        animate: true,
+        duration: 1.5
+      });
+      map.closePopup();
+    }
+  </script>
+
+  <script>
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  {% endblock %}

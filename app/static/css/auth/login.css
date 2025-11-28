@@ -1,0 +1,274 @@
+/* ======== GENERAL STYLING ======== */
+body {
+    background: url("../../image/background_auth.jpg") no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* penting supaya overlay nempel di body */
+    overflow: hidden;
+}
+
+/* Overlay putih transparan di atas background */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.158); /* ubah opacity sesuai selera */
+    z-index: 0;
+}
+
+/* Pastikan konten di atas overlay */
+.container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ======== CARD STYLING ======== */
+.card-container {
+    background-color: #ffffff9f;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.548);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 900px;
+    width: 90%;
+    gap: 30px;
+}
+
+/* ======== CARD IMAGE RESPONSIVE ======== */
+.card-container img {
+    display: none; /* default: sembunyikan */
+}
+
+/* Tampilkan gambar hanya di layar besar (desktop) */
+@media (min-width: 992px) {
+    .card-container img {
+        display: block;
+        max-width: 400px;
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        object-fit: contain;
+
+        /* 🎞️ Efek animasi lembut */
+        animation: float 4s ease-in-out infinite;
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    /* Efek saat hover (sedikit membesar dan lebih cerah) */
+    .card-container img:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+}
+
+/* 🌬️ Animasi "melayang" seperti 3D */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+
+/* ======== RESPONSIVE STYLING ======== */
+@media (max-width: 992px) {
+    .card-container {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+        align-items: center; /* pastikan form tetap center */
+        justify-content: center;
+    }
+
+    .login-container {
+        max-width: 100%;
+        width: 100%; /* form full-width saat gambar disembunyikan */
+    }
+}
+
+@media (max-width: 400px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .form-control,
+    .btn-success,
+    .btn-google {
+        height: 45px;
+        font-size: 14px;
+        min-width: 250px; /* tambahkan ini agar field tidak terlalu kecil */
+    }
+
+    .google-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Form dalam card */
+.login-container {
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tulisan SIPANDA di dalam form */
+.logo-text-in-form {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.logo-text-in-form .si {
+    color: #004400; /* warna hijau untuk "SI" */
+}
+
+.logo-text-in-form .panda {
+    color: brown; /* warna coklat untuk "PANDA" */
+}
+
+/* Biarkan text-align kiri */
+.login-container.text-start {
+    text-align: left;
+}
+
+p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* ======== SAMAKAN UKURAN FIELD DAN TOMBOL ======== */
+.form-control,
+.btn-success,
+.btn-google {
+    background-color: #ffffff;
+    color: #ffffff;
+    border: 1px solid #ddd;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btn-google:hover {
+    background-color: #f5f5f5;
+    color: #000;
+    text-decoration: none; /* tetap tanpa underline saat hover */
+}
+
+.btn-google i {
+    font-size: 18px; /* ukuran icon */
+    text-decoration: none;
+}
+
+/* Input form */
+.form-control {
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px; /* jarak antar field */
+}
+
+/* Lupa password jarak */
+.bpa.lupa-password {
+    margin-bottom: 20px; /* jarak ke tombol Masuk */
+}
+
+/* Tombol submit */
+.btn-success {
+    background-color: #004400;
+    border: none;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.btn-success:hover {
+    background-color: #003300;
+}
+
+/* Tombol Google */
+.btn-google {
+    background-color: #D9D9D9;
+    border: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.btn-google:hover {
+    background-color: #BEBEBE;
+}
+
+/* Ikon Google menggunakan SVG inline */
+.google-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Link dan teks kecil */
+.bpa {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* ======== RESPONSIVE STYLING ======== */
+@media (max-width: 992px) {
+    .card-container {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .card-container img {
+        max-width: 80%;
+    }
+
+    .login-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .form-control,
+    .btn-success,
+    .btn-google {
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .google-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+}

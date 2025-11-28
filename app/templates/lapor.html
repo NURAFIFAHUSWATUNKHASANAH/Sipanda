@@ -1,0 +1,119 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lapor.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="lapor-container">
+        <div class="form-card">
+            <h2 class="form-title">Formulir Laporan</h2>
+            <p class="form-subtitle">Isi data berikut dengan benar untuk mengirim laporan Anda</p>
+
+            <form class="activity-form" enctype="multipart/form-data" method="POST" action="{{ url_for('lapor') }}">
+                <div class="form-group">
+                    <label for="nama_lapor">Nama Lengkap</label>
+                    <input type="text" id="nama_lapor" name="nama_lapor" value="{{ user.nama }}" readonly required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nomer_hp">No HP</label>
+                    <input type="text" id="nomer_hp" name="nomer_hp" value="{{ user.no_telp }}" readonly required>
+                </div>
+
+                <div class="form-group">
+                    <label for="alamat">Alamat</label>
+                    <small>Contoh: Jl. Lawu Dukuhwringin Slawi Tegal</small>
+                    <input type="text" id="alamat" name="alamat" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="maps">Maps</label>
+                    <div id="map"></div>
+                    <input type="text" id="maps" name="maps" placeholder="Klik di peta untuk memilih lokasi" readonly
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gambar_bukti">Bukti Foto</label>
+                    <p class="helper-text">Tambahkan bukti foto (dapat lebih dari satu)</p>
+                    <div id="gambar_bukti_isi">
+                        <input type="file" name="gambar_bukti[]" class="form-control" accept="image/*" required>
+                    </div>
+                    <button type="button" id="add-bukti" class="btn-add">+ Tambah Bukti Foto</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="keterangan">Keterangan</label>
+                    <textarea id="keterangan" name="keterangan" placeholder="Tulis keterangan laporan Anda..."
+                        required></textarea>
+                </div>
+
+                {% if file_url %}
+                <div class="form-group">
+                    <label for="file_url">Gambar Hasil Scan</label>
+                    <div class="uploaded-image">
+                        <img src="{{ url_for('static', filename=file_url) }}" alt="Gambar Hasil Scan">
+                    </div>
+                </div>
+                {% endif %}
+
+                <input type="hidden" name="file_url" value="{{ file_url }}">
+                <button type="submit" class="btn-submit">Kirim Laporan</button>
+            </form>
+        </div>
+
+        <div class="illustration">
+            <img src="{{ url_for('static', filename='image/lapor.png') }}"
+                alt="Illustration of reporting">
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block scripts %}
+<!-- Tambah input bukti foto -->
+<script>
+    document.getElementById('add-bukti').addEventListener('click', function () {
+        const container = document.getElementById('gambar_bukti_isi');
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'gambar_bukti[]';
+        newInput.classList.add('form-control', 'mb-2');
+        container.appendChild(newInput);
+    });
+</script>
+
+<!-- Script untuk peta -->
+<script src="{{ url_for('static', filename='js/lapor.js') }}"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Tampilkan SweetAlert jika laporan berhasil -->
+{% with messages = get_flashed_messages() %}
+{% if 'popup' in messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            title: 'Laporan Berhasil!',
+            text: 'Laporan berhasil dikirim. Silakan tunggu proses verifikasi oleh petugas.',
+            icon: 'success',
+            confirmButtonText: 'Lihat Status Laporan',
+            confirmButtonColor: '#014224',
+            background: '#fefefe',
+            color: '#333',
+            customClass: {
+                popup: 'rounded-3xl shadow-lg'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ url_for('status_laporan') }}";
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dataBalai.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="content-databalai">
+    <h1 class="judl">Kumpulan Data Balai Konservasi</h1>
+    <p class="para">Kumpulan total hewan tiap tahun yang dilindungi di Indonesia</p>
+    <div class="content-kanan">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari">
+            <button id="searchButton" class="search-button">Cari</button>
+            <button id="resetButton">Kembali</button>
+        </div>
+    </div>
+
+    <div id="loader">Memuat data...</div>
+
+    <div class="bagianCard" id="cardContainer">
+        {% for balai in balais %}
+        <div class="cardData">
+            <div class="imgCardD">
+                <img src="{{ url_for('static', filename='gambarUser/' + balai.gambarbalai) }}"
+                    alt="{{ balai.nama_balai }}">
+            </div>
+            <h1 title="{{ balai.nama_balai }}">{{ balai.nama_balai }}</h1>
+            <div class="btnCardD">
+                <a href="{{ url_for('pindahHalamanBalai', id_balaikonservasi=balai.id_balaikonservasi) }}">Lihat</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const resetButton = document.getElementById('resetButton');
+    const loader = document.getElementById('loader');
+    const cardContainer = document.getElementById('cardContainer');
+
+
+    function loadAllData() {
+        loader.style.display = 'block';
+        cardContainer.innerHTML = '';
+
+        fetch('/api/pencarian/balai')
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+
+
+                data.forEach(balai => {
+                    const card = `
+                        <div class="cardData">
+                            <div class="imgCardD">
+                                <img src="/static/gambarUser/${balai.gambarbalai}" alt="${balai.nama_balai}">
+                            </div>
+                            <h1 title="${balai.nama_balai}">${balai.nama_balai}</h1>
+                            <div class="btnCardD">
+                                <a href="#">Lihat</a>
+                            </div>
+                        </div>`;
+                    cardContainer.innerHTML += card;
+                });
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                console.error('Error fetching data:', error);
+                cardContainer.innerHTML = '<p>Terjadi kesalahan saat memuat data.</p>';
+            });
+    }
+
+    searchButton.addEventListener('click', function () {
+        const query = searchInput.value;
+
+        loader.style.display = 'block';
+        cardContainer.innerHTML = '';
+
+        fetch(`/api/pencarian/balai?search=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+
+
+                if (data.length === 0) {
+                    cardContainer.innerHTML = '<p>Tidak ada data ditemukan.</p>';
+                    return;
+                }
+
+                data.forEach(balai => {
+                    const card = `
+                        <div class="cardData">
+                            <div class="imgCardD">
+                                <img src="/static/gambarUser/${balai.gambarbalai}" alt="${balai.nama_balai}">
+                            </div>
+                            <h1 title="${balai.nama_balai}">${balai.nama_balai}</h1>
+                            <div class="btnCardD">
+                                <a href="#">Lihat</a>
+                            </div>
+                        </div>`;
+                    cardContainer.innerHTML += card;
+                });
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                console.error('Error fetching data:', error);
+                cardContainer.innerHTML = '<p>Terjadi kesalahan saat memuat data.</p>';
+            });
+    });
+
+    resetButton.addEventListener('click', function () {
+       window.location.href = '/'; 
+   });
+
+    document.addEventListener('DOMContentLoaded', loadAllData);
+</script>
+{%endblock%}

@@ -1,0 +1,307 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/konservasi.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<div class="konservasi-container">
+    <div class="konservasi-title">
+        <i class="uil uil-map-marker"></i>
+        <span>Kelola Kawasan Konservasi</span>
+    </div>
+
+    <!-- Tombol Tambah -->
+    <div class="konservasi-button-container">
+        <button class="konservasi-add-btn" data-toggle="modal" data-target="#modalTambahKawasan">Tambah</button>
+    </div>
+
+    <div class="table-responsive">
+        <table id="kawasanTable" class="table table-konservasi" data-toggle="table" data-search="true"
+            data-show-columns="true" data-show-refresh="true" data-pagination="true"
+            data-page-list="[5, 10, 20, 50, 100]" data-show-export="true" data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-kawasan"}'>
+            <thead>
+                <tr>
+                    <th data-field="no" data-sortable="true">#</th>
+                    <th data-field="foto">Foto</th>
+                    <th data-field="jenis">Jenis</th>
+                    <th data-field="nama" data-sortable="true">Nama</th>
+                    <th data-field="lokasi">Lokasi</th>
+                    <th data-field="deskripsi">Deskripsi</th>
+                    <th data-field="aksi">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        {% if item.foto %}
+                        <img src="{{ url_for('static', filename='gambarKawasan/' + item.foto) }}"
+                            class="table-img-konservasi">
+                        {% endif %}
+                    </td>
+                    <td>{{ item.jenis.nama }}</td>
+                    <td>{{ item.nama }}</td>
+                    <td>{{ item.lokasi }}</td>
+                    <td data-export-text="{{ item.deskripsi }}">{{ item.deskripsi[:50] }}...</td>
+                    <td>
+                        <div class="konservasi-action-buttons">
+                            <!-- Edit -->
+                            <button class="konservasi-btn-circle edit" data-id="{{ item.id }}"
+                                data-jenis="{{ item.jenis_id }}" data-nama="{{ item.nama }}"
+                                data-lokasi="{{ item.lokasi }}" data-deskripsi="{{ item.deskripsi }}"
+                                data-foto="{{ item.foto }}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+
+                            <!-- Hapus -->
+                            <form action="{{ url_for('delete_kawasan', id=item.id) }}" method="POST"
+                                class="delete-form d-inline">
+                                <button type="button" class="konservasi-btn-circle delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Tambah -->
+<div class="modal fade" id="modalTambahKawasan" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ url_for('create_kawasan') }}" enctype="multipart/form-data"
+            id="formTambahKawasan">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Tambah Kawasan</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Jenis Kawasan</label>
+                        <select name="jenis_id" class="form-control">
+                            {% for j in jenis_list %}
+                            <option value="{{ j.id }}">{{ j.nama }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input type="text" name="nama" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Lokasi</label>
+                        <input type="text" name="lokasi" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Foto</label>
+                        <input type="file" name="foto" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="modalEditKawasan" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" id="formEditKawasan" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Edit Kawasan</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit_id">
+                    <div class="form-group">
+                        <label>Jenis Kawasan</label>
+                        <select name="jenis_id" id="edit_jenis" class="form-control">
+                            {% for j in jenis_list %}
+                            <option value="{{ j.id }}">{{ j.nama }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input type="text" name="nama" id="edit_nama" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Lokasi</label>
+                        <input type="text" name="lokasi" id="edit_lokasi" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Foto</label>
+                        <input type="file" name="foto" class="form-control" id="edit_foto_input">
+                        <div class="mt-2 text-center">
+                            <img id="preview_edit_foto" src="" alt="Preview Foto" class="img-thumbnail"
+                                style="max-width: 180px; display: none;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi" id="edit_deskripsi" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Tombol edit buka modal
+        $('.edit').click(function () {
+            var btn = $(this);
+            $('#edit_id').val(btn.data('id'));
+            $('#edit_nama').val(btn.data('nama'));
+            $('#edit_lokasi').val(btn.data('lokasi'));
+            $('#edit_deskripsi').val(btn.data('deskripsi'));
+            $('#edit_jenis').val(btn.data('jenis'));
+
+            // tampilkan gambar lama
+            const foto = btn.data('foto');
+            if (foto) {
+                const path = `/static/gambarKawasan/${foto}`;
+                $('#preview_edit_foto').attr('src', path).show();
+            } else {
+                $('#preview_edit_foto').hide();
+            }
+
+            $('#formEditKawasan').attr('action', '/admin/kawasan/update/' + btn.data('id'));
+            $('#modalEditKawasan').modal('show');
+        });
+
+        // preview foto baru jika dipilih
+        $('#edit_foto_input').change(function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview_edit_foto').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Tambah data via AJAX
+        $('#formTambahKawasan').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function () {
+                    $('#modalTambahKawasan').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil ditambahkan.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        // Edit data via AJAX
+        $('#formEditKawasan').submit(function (e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: '/admin/kawasan/update/' + id,
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function () {
+                    $('#modalEditKawasan').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data diperbarui.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        // Pastikan modal bisa ditutup via tombol close atau Batal
+        $(document).on('click', '#modalEditKawasan .close, #modalEditKawasan .btn-secondary', function () {
+            $('#modalEditKawasan').modal('hide');
+        });
+
+        // === Hapus data dengan SweetAlert + AJAX ===
+        $('.delete').click(function () {
+            const form = $(this).closest('.delete-form');
+            const actionUrl = form.attr('action');
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: actionUrl,
+                        type: 'POST',
+                        success: function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil dihapus.',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => location.reload());
+                        },
+                        error: function () {
+                            Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

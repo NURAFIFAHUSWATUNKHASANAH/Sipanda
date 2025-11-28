@@ -1,0 +1,57 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+
+<div class="activity">
+    <div class="title">
+        <i class="uil uil-list-ul"></i>
+        <span class="text">Daftar Akun Balai Konservasi</span>
+    </div>
+    
+    <div class="button-container">
+        <a href="{{ url_for('tambah_akun_balai_form') }}">
+            <button class="add-data-btn">Tambah Akun</button>
+        </a>
+    </div>
+    
+    <div class="activity-data">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>No. Telepon</th>
+                    <th>Kabupaten</th>
+                    <th>Provinsi</th>
+                    <th>Alamat</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for balai in akun_balai %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    
+                    <td>{{ balai.nama }}</td>
+                    <td>{{ balai.email }}</td>
+                    <td>{{ balai.no_telp }}</td>
+                    <td>{{ balai.kabupaten}}</td>
+                    <td>{{ balai.provinsi }}</td>
+                    <td>{{ balai.alamat }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_balai', id=balai.id) }}" class="action-btn edit-btn">Edit</a>
+                        <form action="{{ url_for('delete_balai', id=balai.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="action-btn delete-btn" onclick="return confirm('Yakin ingin menghapus akun ini?')">
+                                Hapus
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

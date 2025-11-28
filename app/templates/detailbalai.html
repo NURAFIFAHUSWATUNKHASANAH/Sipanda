@@ -1,0 +1,63 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/detailBalai.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="content-detail">
+    <div class="bagianHeader">
+        <div class="bagianGambar">
+            <img src="{{ url_gambar }}" alt="{{ balai.nama_balai }}">
+        </div>
+        <div class="bagianContent">
+            <h1>{{ balai.nama_balai }}</h1>
+            <h3>{{ balai.provinsi }}</h3>
+            <div class="garisIjo"></div>
+            <p>{{ balai.deskripsi }}</p>
+
+            <div class="rowCard">
+                <div class="cardData">
+                    <h2>Alamat</h2>
+                    <h3>{{ balai.alamat }}</h3>
+                </div>
+                <div class="cardData">
+                    <h2>Waktu Dibuat</h2>
+                    <h3>{{ balai.created_at.strftime('%d %B %Y') }}</h3>
+                </div>
+
+                <!-- Tambahan: Call Center -->
+                <div class="cardData">
+                    <h2>Call Center</h2>
+                    <h3>{{ balai.call_center }}</h3>
+                </div>
+
+                <!-- Tambahan: Latitude -->
+                <div class="cardData">
+                    <h2>Latitude</h2>
+                    <h3>{{ balai.latitude }}</h3>
+                </div>
+
+                <!-- Tambahan: Longitude -->
+                <div class="cardData">
+                    <h2>Longitude</h2>
+                    <h3>{{ balai.longitude }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section untuk menampilkan ciri-ciri atau informasi tambahan jika ada -->
+    <div class="bagianCiri">
+        <h1>Informasi Tambahan</h1>
+        <div class="garisIjo"></div>
+        
+        <!-- Jika ada informasi tambahan, tampilkan disini -->
+        {% if balai.informasi_tambahan %}
+        <div class="cardCiri">
+            <h1>{{ balai.informasi_tambahan }}</h1>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

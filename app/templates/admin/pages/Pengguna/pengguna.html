@@ -1,0 +1,203 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/datahewan.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<div class="hewan-container">
+    <div class="hewan-title">
+        <i class="uil uil-clock-three"></i>
+        <span>Data User</span>
+    </div>
+
+    <div class="table-responsive">
+        <table id="userTable" class="table table-hewan"
+               data-toggle="table"
+               data-toolbar="#toolbar"
+               data-search="true"
+               data-show-columns="true"
+               data-show-refresh="true"
+               data-pagination="true"
+               data-page-list="[5, 10, 20, 50, 100]"
+               data-show-export="true"
+               data-export-types="['excel','csv','pdf']"
+               data-export-options='{"fileName": "data-user"}'
+               data-pagination-pre-text="‹"
+               data-pagination-next-text="›">
+            <thead class="thead-dark">
+                <tr>
+                    <th data-field="no" data-sortable="true">No</th>
+                    <th data-field="gambar">Gambar</th>
+                    <th data-field="nama" data-sortable="true">Nama</th>
+                    <th data-field="email" data-sortable="true">Email</th>
+                    <th data-field="no_telp">No Hp</th>
+                    <th data-field="role">Role</th>
+                    <th data-field="aksi">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <img src="{{ url_for('static', filename='gambarUser/' ~ (user.img_profil if user.img_profil else 'default.jpg')) }}"
+                             alt="Gambar Profil" width="50" height="50">
+                    </td>
+                    <td data-export-text="{{ user.nama }}">{{ user.nama }}</td>
+                    <td data-export-text="{{ user.email }}">{{ user.email }}</td>
+                    <td data-export-text="{{ user.no_telp }}">{{ user.no_telp }}</td>
+                    <td data-export-text="{{ user.role.value }}">{{ user.role.value }}</td>
+                    <td>
+                        <button class="hewan-btn-circle edit" 
+                                data-id="{{ user.id }}"
+                                data-nama="{{ user.nama }}"
+                                data-email="{{ user.email }}"
+                                data-no_telp="{{ user.no_telp }}"
+                                data-role="{{ user.role.value }}"
+                                data-img_profil="{{ user.img_profil }}">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL EDIT USER -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserLabel">Edit Data Pengguna</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditUser" enctype="multipart/form-data">
+                    <input type="hidden" name="user_id" id="edit_user_id">
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input type="text" name="nama" id="edit_nama" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" id="edit_email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No Hp</label>
+                        <input type="text" name="no_telp" id="edit_no_telp" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select name="role" id="edit_role" class="form-control" required>
+                            <option value="user">User</option>
+                            <option value="pihak_berwajib">Pihak Berwajib</option>
+                            <option value="super_admin">Super Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar Profil (Kosongkan jika tidak ingin diubah)</label>
+                        <input type="file" name="img_profil" id="edit_img_profil" class="form-control">
+                        <img id="edit_preview_img" src="" alt="Preview Gambar" class="img-thumbnail mt-2"
+                             style="max-height:150px; display:none;">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+    // Tombol edit klik -> isi modal
+    $('.edit').on('click', function () {
+        const btn = $(this);
+        $('#edit_user_id').val(btn.data('id'));
+        $('#edit_nama').val(btn.data('nama'));
+        $('#edit_email').val(btn.data('email'));
+        $('#edit_no_telp').val(btn.data('no_telp'));
+        $('#edit_role').val(btn.data('role'));
+
+        const img = btn.data('img_profil');
+        if(img){
+            $('#edit_preview_img').attr('src', '/static/gambarUser/' + img).show();
+        } else {
+            $('#edit_preview_img').hide();
+        }
+
+        $('#editUserModal').modal('show');
+    });
+
+    // Preview gambar saat pilih file baru
+    $('#edit_img_profil').on('change', function () {
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $('#edit_preview_img').attr('src', e.target.result).show();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $('#edit_preview_img').hide();
+        }
+    });
+
+    // Submit form edit via AJAX
+    $('#formEditUser').on('submit', function (e) {
+        e.preventDefault();
+        const userId = $('#edit_user_id').val();
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: '/admin/pengguna/update/' + userId,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                $('#editUserModal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Data pengguna berhasil diperbarui.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => location.reload());
+            },
+            error: function () {
+                Swal.fire('Gagal!', 'Terjadi kesalahan saat menyimpan data.', 'error');
+            }
+        });
+    });
+});
+
+// Pastikan tombol "Batal" dan "X" menutup modal
+$(document).on('click', '#editUserModal [data-dismiss="modal"], #editUserModal .close', function () {
+    $('#editUserModal').modal('hide');
+});
+
+// Pastikan body tidak ke-freeze setelah modal ditutup
+$('#editUserModal').on('hidden.bs.modal', function () {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
+
+</script>
+{% endblock %}

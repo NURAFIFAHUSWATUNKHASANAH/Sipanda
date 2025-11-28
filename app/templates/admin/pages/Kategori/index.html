@@ -1,0 +1,222 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/kategorisatwa.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<div class="kategorisatwa-container">
+    <div class="kategorisatwa-title">
+        <i class="uil uil-clock-three"></i>
+        <span>Kelola Kategori Satwa</span>
+    </div>
+
+    <!-- Tombol Tambah Modal -->
+    <div class="kategorisatwa-button-container">
+        <button class="kategorisatwa-add-btn" data-toggle="modal" data-target="#tambahKategoriModal">
+            Tambah
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table id="kategoriTable" class="table table-kategorisatwa" data-toggle="table" data-toolbar="#toolbar"
+            data-search="true" data-show-columns="true" data-show-refresh="true" data-pagination="true"
+            data-page-list="[5,10,20,50]" data-show-export="true" data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-kategori"}' data-pagination-pre-text="‹"
+            data-pagination-next-text="›">
+            <thead>
+                <tr>
+                    <th data-field="no" data-sortable="true">No</th>
+                    <th data-field="nama_kategori" data-sortable="true">Nama Kategori</th>
+                    <th data-field="aksi">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kategori in kategoriData %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td data-export-text="{{ kategori.nama_kategori }}">{{ kategori.nama_kategori }}</td>
+                    <td>
+                        <div class="kategorisatwa-action-buttons">
+                            <button class="kategorisatwa-btn-circle edit" data-id="{{ kategori.id_kategori }}"
+                                data-nama="{{ kategori.nama_kategori }}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+
+                            <form action="{{ url_for('hapusKategori', id_kategori=kategori.id_kategori) }}"
+                                method="POST" class="delete-form d-inline">
+                                <button type="button" class="kategorisatwa-btn-circle delete"
+                                    data-id="{{ kategori.id_kategori }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL TAMBAH KATEGORI -->
+<div class="modal fade" id="tambahKategoriModal" tabindex="-1" aria-labelledby="tambahKategoriLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahKategoriLabel">Tambah Kategori</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formTambahKategori" method="POST" action="{{ url_for('kategoriTambah') }}">
+                    <div class="form-group">
+                        <label>Nama Kategori</label>
+                        <input type="text" name="nama_kategori" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDIT KATEGORI -->
+<div class="modal fade" id="editKategoriModal" tabindex="-1" aria-labelledby="editKategoriLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editKategoriLabel">Edit Kategori</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditKategori" method="POST">
+                    <input type="hidden" id="edit_id_kategori" name="id_kategori">
+                    <div class="form-group">
+                        <label>Nama Kategori</label>
+                        <input type="text" id="edit_nama_kategori" name="nama_kategori" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Tombol Simpan tetap submit -->
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <!-- Tombol Batal: type button + data-dismiss -->
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        // ================== Tambah Kategori ==================
+        $('#formTambahKategori').on('submit', function (e) {
+            e.preventDefault();
+            const form = $(this);
+            const url = form.attr('action');
+            const data = form.serialize();
+
+            $.post(url, data)
+                .done(function () {
+                    $('#tambahKategoriModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil ditambahkan',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                })
+                .fail(function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan saat menambahkan data.', 'error');
+                });
+        });
+
+        // ================== Edit Kategori ==================
+        $(document).on('click', '.edit', function () {
+            const btn = $(this);
+            $('#edit_id_kategori').val(btn.data('id'));
+            $('#edit_nama_kategori').val(btn.data('nama'));
+            $('#editKategoriModal').modal('show');
+        });
+
+        $('#editKategoriModal').on('click', '[data-dismiss="modal"]', function () {
+            $('#editKategoriModal').modal('hide');
+        });
+
+        $('#formEditKategori').on('submit', function (e) {
+            e.preventDefault();
+            const id = $('#edit_id_kategori').val();
+            const nama = $('#edit_nama_kategori').val();
+
+            $.post('/admin/kategori/update/' + id, { nama_kategori: nama })
+                .done(function () {
+                    $('#editKategoriModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil disimpan',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                })
+                .fail(function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan saat menyimpan data.', 'error');
+                });
+        });
+
+        // ================== Hapus Kategori ==================
+        $(document).on('click', '.delete', function (e) {
+            e.preventDefault();
+            const form = $(this).closest('.delete-form');
+            const actionUrl = form.attr('action');
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(actionUrl)
+                        .done(function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil dihapus',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => location.reload());
+                        })
+                        .fail(function () {
+                            Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
+                        });
+                }
+            });
+        });
+
+    });
+</script>
+{% endblock %}

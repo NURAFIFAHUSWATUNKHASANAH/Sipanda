@@ -1,0 +1,29 @@
+{% extends "/admin/layout/index.html" %}
+
+
+{% block content %}
+<form action="{{ url_for('create_berita') }}" method="POST" enctype="multipart/form-data" class="create-form">
+    <div class="form-group">
+        <label for="title">Judul Berita</label>
+        <input type="text" id="title" name="title" placeholder="Masukkan judul berita..." required>
+    </div>
+
+    <div class="form-group">
+        <label for="date">Tanggal</label>
+        <input type="date" id="date" name="date" required>
+    </div>
+
+    <div class="form-group">
+        <label for="image">Gambar</label>
+        <input type="file" id="image" name="image" accept="image/*">
+    </div>
+
+    <div class="form-group">
+        <label for="content">Konten Berita</label>
+        <textarea id="content" name="content" rows="8" placeholder="Masukkan konten berita..." required></textarea>
+    </div>
+<div class="button-container">
+    <button type="submit" class="add-data-btn">Unggah</button>
+    </div>
+</form>
+{% endblock %}

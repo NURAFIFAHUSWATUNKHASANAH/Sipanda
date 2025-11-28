@@ -1,0 +1,133 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sentimen.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Visualisasi Data Sentimen</h2>
+    <div class="row">
+        <!-- Positive Response Card -->
+        
+        <div class="col-md-6">
+            <div class="sentiment-card positive-card">
+                <i class="bi bi-emoji-smile sentiment-icon"></i>
+                <div class="sentiment-details">
+                    <h5 class="card-title">Positive Responses</h5>
+                    <p class="card-count">{{ positive }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Negative Response Card -->
+        <div class="col-md-6">
+            <div class="sentiment-card negative-card">
+                <i class="bi bi-emoji-frown sentiment-icon"></i>
+                <div class="sentiment-details">
+                    <h5 class="card-title">Negative Responses</h5>
+                    <p class="card-count">{{ negative }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="mt-4 chart-container">
+        <canvas id="sentimentChart"></canvas>
+    </div>
+    <div class="tabelsen">
+        <!-- Tabel untuk Komentar Positif -->
+        <h4 class="tbl-positif">Komentar Positif</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Komentar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in positive_comments %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ comment.text }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center">Belum ada komentar positif.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Tabel untuk Komentar Negatif -->
+        <h4 class="tbl-negatif">Komentar Negatif</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Komentar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in negative_comments %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ comment.text }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center">Belum ada komentar negatif.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data dari backend
+    const positiveCount = {{ positive }};
+    const negativeCount = {{ negative }};
+
+    // Konfigurasi Chart.js
+    const ctx = document.getElementById('sentimentChart').getContext('2d');
+    const sentimentChart = new Chart(ctx, {
+        type: 'pie', // Jenis chart: pie, bar, dll.
+        data: {
+            labels: ['Positive', 'Negative'], // Label kategori
+            datasets: [{
+                label: 'Sentiment Analysis',
+                data: [positiveCount, negativeCount], // Data dari backend
+                backgroundColor: [
+                    'rgba(76, 175, 80, 0.6)', // Warna untuk Positive
+                    'rgba(244, 67, 54, 0.6)'  // Warna untuk Negative
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top', 
+                },
+                tooltip: {
+                    enabled: true, 
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

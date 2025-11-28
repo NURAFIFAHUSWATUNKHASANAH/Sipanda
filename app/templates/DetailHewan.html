@@ -1,0 +1,48 @@
+{% extends "/layout/layout.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/detailHewan.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="content-detail">
+    <div class="bagianHeader">
+        <div class="bagianGambar">
+            <img src="{{ url_gambar }}" alt="" srcset="">
+        </div>
+        <div class="bagianContent">
+            <h1>{{hewans.nama}}</h1>
+            <h3>{{hewans.nama_latin}}</h3>
+            <div class="garisIjo"></div>
+            <p>{{hewans.deskripsi}}</p>
+
+                <div class="rowCard">
+                    <div class="cardData">
+                        <h2>Jumlah Populasi</h2>
+                        <h3>{{hewans.populasi}}</h3>
+                    </div>
+                    <div class="cardData">
+                        <h2>Perhatian</h2>
+                        <h3>{{hewans.status}}</h3>
+                    </div>
+                    <div class="cardData">
+                        <h2>Habitat</h2>
+                        <h3>{{hewans.habitat}}</h3>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bagianCiri">
+        <h1>Ciri - Ciri</h1>
+        
+        <div class="garisIjo"></div>
+
+        {%for js in hewans.ciri_ciri%}
+        <div class="cardCiri">
+            <h1>{{loop.index}}. {{js.ciri}}</h1>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+{% endblock %}

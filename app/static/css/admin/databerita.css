@@ -1,0 +1,742 @@
+/* ===== Halaman Daftar Berita (databerita.css - versi ringkas & aktif) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+:root {
+    --warna-utama-berita: #014224;
+    --warna-hapus-berita: #c9302c;
+    --warna-hover-berita: #007a41;
+    --warna-hover-hapus-berita: #d9534f;
+    --warna-tabel-head-berita: #ffffff;
+    --warna-tabel-border-berita: #ddd;
+
+    /* Dark mode vars */
+    --warna-dasar-dark: #242526;
+    --warna-utama-berita-dark: #3A3B3C;
+    --warna-simpan-berita-dark: #979797;
+    --warna-hapus-berita-dark: #5d5d5d;
+    --warna-hover-berita-dark: #3A3B3C;
+    --warna-hover-hapus-berita-dark: #3A3B3C;
+    --warna-tabel-head-dark: #CCC;
+    --warna-tabel-border-dark: #4D4C4C;
+    --warna-text-dark: #CCC;
+    --warna-modal-body-dark: #3A3B3C;
+}
+
+/* ===== Layout Utama ===== */
+.berita-container {
+    background: #ffffff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.527);
+    font-size: 14px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+body.dark .berita-container {
+    background: var(--warna-dasar-dark);
+    color: var(--warna-text-dark);
+}
+
+.berita-container:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== Judul Halaman ===== */
+.berita-title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--warna-utama-berita);
+}
+
+body.dark .berita-title {
+    color: var(--warna-text-dark);
+}
+
+.berita-title i {
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+/* ===== Tombol Tambah ===== */
+.berita-button-container {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.berita-add-btn {
+    background: #014224;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.berita-add-btn:hover {
+    transform: translateY(-2px);
+    background: #016d3a;
+}
+
+body.dark .berita-add-btn {
+    background: var(--warna-utama-berita-dark);
+    color: var(--warna-text-dark);
+}
+
+body.dark .berita-add-btn:hover {
+    background: var(--warna-hover-berita-dark);
+}
+
+/* ===========================
+        Tabel Berita Custom
+   =========================== */
+.table-berita {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table-berita thead th {
+    background-color: #014224 !important;
+    color: #fff !important;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #e5e5e5;
+}
+
+/* Dark mode seluruh tabel */
+body.dark .table-berita,
+body.dark .table-berita thead,
+body.dark .table-berita tbody,
+body.dark .table-berita th,
+body.dark .table-berita td {
+    background-color: #3A3B3C !important;
+    color: #CCC !important;
+    border-color: #4D4C4C !important;
+}
+
+body.dark .table-berita thead th {
+    background-color: var(--warna-utama-berita-dark) !important;
+    color: var(--warna-tabel-head-dark) !important;
+    border: 1px solid var(--warna-tabel-border-dark);
+}
+
+.table-berita tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-berita tbody tr:hover {
+    background-color: rgba(0, 123, 65, 0.05);
+}
+
+/* ===== Gaya Gambar dalam Tabel ===== */
+.table-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ===========================
+   Tombol Aksi Bulat
+   =========================== */
+.berita-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.berita-btn-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.berita-btn-circle.edit {
+    background-color: var(--warna-utama-berita);
+}
+
+.berita-btn-circle.edit:hover {
+    background-color: var(--warna-hover-berita);
+    transform: translateY(-2px);
+}
+
+.berita-btn-circle.delete {
+    background-color: var(--warna-hapus-berita);
+}
+
+.berita-btn-circle.delete:hover {
+    background-color: var(--warna-hover-hapus-berita);
+    transform: translateY(-2px);
+}
+
+body.dark .berita-btn-circle.edit {
+    background-color: var(--warna-utama-berita-dark);
+}
+
+body.dark .berita-btn-circle.delete {
+    background-color: var(--warna-hapus-berita-dark);
+}
+
+/* ===== Responsif ===== */
+@media (max-width: 768px) {
+    .berita-add-btn {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+
+    .berita-btn-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+
+    .table-img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ===========================
+   Toolbar Bootstrap Table
+   =========================== */
+.bootstrap-table .fixed-table-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    margin-bottom: 12px;
+}
+
+.bootstrap-table .fixed-table-toolbar .btn,
+.bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+    background-color: #014224 !important;
+    border-color: #014224 !important;
+    color: #fff !important;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    height: 38px;
+}
+
+.bootstrap-table .fixed-table-toolbar .btn:hover {
+    background-color: #007a41 !important;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .btn {
+    background-color: #3A3B3C !important;
+    color: #CCC !important;
+}
+
+/* ===== Modal Tambah & Edit ===== */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+body.dark .modal-content {
+    background-color: var(--warna-modal-body-dark);
+}
+
+.modal-header {
+    background-color: var(--warna-utama-berita);
+    color: #fff;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+}
+
+body.dark .modal-header {
+    background-color: var(--warna-utama-berita-dark);
+    color: var(--warna-text-dark);
+}
+
+.modal-header .modal-title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.modal-body {
+    padding: 24px;
+    background-color: #fafafa;
+}
+
+body.dark .modal-body {
+    background-color: var(--warna-modal-body-dark);
+    color: var(--warna-text-dark);
+}
+
+.modal-body .form-group label {
+    font-weight: 500;
+    color: #014224;
+    margin-bottom: 6px;
+}
+
+.modal-body .form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn {
+    border-radius: 8px;
+    padding: 8px 18px;
+}
+
+.btn-success {
+    background-color: #014224;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #007a41;
+}
+
+/* Label di modal (judul, tanggal, konten) */
+body.dark .modal-body .form-group label {
+    color: var(--warna-text-dark) !important;
+}
+
+/* Field input, textarea, dan file upload */
+body.dark .modal-body .form-control {
+    background-color: #2b2b2b !important;
+    color: #f1f1f1 !important;
+    border: 1px solid #555 !important;
+}
+
+/* Placeholder agar juga tidak terlalu terang */
+body.dark .modal-body .form-control::placeholder {
+    color: #aaa !important;
+}
+
+/* Preview gambar dalam modal */
+body.dark .modal-body #previewTambahContainer,
+body.dark .modal-body #previewEditContainer {
+    background-color: #3a3b3c;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* Tombol Simpan & Batal */
+body.dark .modal-footer .btn-success {
+    background-color: var(--warna-simpan-berita-dark);
+    border: none;
+    color: #fff !important;
+}
+
+body.dark .modal-footer .btn-secondary {
+    background-color: var(--warna-hapus-berita-dark);
+    color: #f1f1f1 !important;
+}
+
+/* ===========================
+   Toolbar untuk tabel Hewan
+   =========================== */
+
+/* Toolbar utama */
+.bootstrap-table .fixed-table-toolbar {
+    display: flex;
+    justify-content: flex-end; /* posisikan ke kanan */
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    margin-bottom: 12px;
+    padding-right: 0; /* sama dengan padding kanan container */
+    padding-left: 0; /* optional */
+}
+
+/* Grup tombol (refresh, column, export) */
+.bootstrap-table .fixed-table-toolbar .btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* Tombol toolbar */
+.bootstrap-table .fixed-table-toolbar .btn,
+.bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+    background-color: #014224 !important;
+    border-color: #014224 !important;
+    color: #fff !important;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 16px;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 6px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+}
+
+.bootstrap-table .fixed-table-toolbar .btn:hover,
+.bootstrap-table .fixed-table-toolbar .dropdown-toggle:hover {
+    background-color: #007a41 !important;
+    border-color: #007a41 !important;
+}
+
+/* Input pencarian */
+.bootstrap-table .fixed-table-toolbar .search input {
+    height: 38px;
+    border-radius: 6px;
+    width: 250px;
+    font-size: 14px;
+    padding: 0 10px;
+    max-width: 100%;
+}
+
+/* Dropdown */
+.bootstrap-table .fixed-table-toolbar .dropdown-menu {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+
+/* ===== Dark mode untuk toolbar dan tombol Bootstrap Table ===== */
+body.dark .bootstrap-table .fixed-table-toolbar .btn,
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+    background-color: #3A3B3C !important; /* warna gelap */
+    border-color: #3A3B3C !important;
+    color: #CCC !important; /* teks terang */
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .btn:hover,
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-toggle:hover {
+    background-color: #4D4C4C !important; /* hover sedikit lebih terang */
+    border-color: #4D4C4C !important;
+    color: #FFF !important;
+}
+
+/* Input search */
+body.dark .bootstrap-table .fixed-table-toolbar .search input {
+    background-color: #3A3B3C;
+    border: 1px solid #4D4C4C;
+    color: #CCC;
+}
+
+/* Dropdown menu */
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-menu {
+    background-color: #3A3B3C;
+    color: #CCC;
+    border: 1px solid #4D4C4C;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-menu a {
+    color: #CCC;
+}
+
+body.dark .bootstrap-table .fixed-table-toolbar .dropdown-menu a:hover {
+    background-color: #4D4C4C;
+    color: #FFF;
+}
+
+/* ===========================
+   RESPONSIVE TOOLBAR
+   =========================== */
+
+/* Untuk layar sedang (tablet landscape, 992px ke bawah) */
+@media (max-width: 992px) {
+    .bootstrap-table .fixed-table-toolbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search input {
+        width: 200px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn,
+    .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+        font-size: 13px;
+        padding: 6px 12px;
+        min-width: 80px;
+        height: 36px;
+    }
+}
+
+/* Untuk layar kecil (tablet portrait atau ponsel besar, 768px ke bawah) */
+@media (max-width: 768px) {
+    .bootstrap-table .fixed-table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search {
+        width: 100%;
+        order: 1;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search input {
+        width: 100%;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn-group {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        order: 2;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn,
+    .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+        flex: 1 1 48%;
+        min-width: unset;
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+}
+
+/* Untuk layar sangat kecil (ponsel, 576px ke bawah) */
+@media (max-width: 576px) {
+    .bootstrap-table .fixed-table-toolbar {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .search input {
+        width: 100%;
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn-group {
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .bootstrap-table .fixed-table-toolbar .btn,
+    .bootstrap-table .fixed-table-toolbar .dropdown-toggle {
+        width: 100%;
+        font-size: 12px;
+        padding: 6px 8px;
+        height: 34px;
+    }
+}
+
+
+/* ===== Gaya Toolbar dengan Ikon ===== */
+.toolbar-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.toolbar-icons .btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toolbar-icons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsif di layar kecil */
+@media (max-width: 768px) {
+    .table-hewan {
+        font-size: 13px;
+        /* font lebih kecil */
+    }
+
+    .table-hewan th,
+    .table-hewan td {
+        padding: 6px 8px;
+        /* padding dikurangi */
+    }
+
+    .toolbar-icons {
+        justify-content: center;
+    }
+
+    .toolbar-icons .btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .table-img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ===== Responsif tabel dan toolbar untuk layar sangat kecil ===== */
+@media (max-width: 576px) {
+    .table-hewan {
+        font-size: 12px;
+        /* font lebih kecil lagi */
+    }
+
+    .table-hewan th,
+    .table-hewan td {
+        padding: 4px 6px;
+        /* padding minimal */
+    }
+
+    .hewan-container {
+        padding: 16px 12px;
+        font-size: 13px;
+    }
+
+    .hewan-add-btn {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .hewan-btn-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .table-img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+
+
+/* ============================= Choose File di Modal ===================== */
+
+/* ===== Input File Dark Mode ===== */
+.modal-body input[type="file"] {
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+/* Dark mode untuk input file */
+body.dark .modal-body input[type="file"] {
+    background-color: #3A3B3C; /* gelap lembut */
+    color: #CCC; /* teks terang */
+    border: 1px solid #4D4C4C; /* border gelap */
+}
+
+/* Hover & focus */
+body.dark .modal-body input[type="file"]:hover,
+body.dark .modal-body input[type="file"]:focus {
+    border-color: #CCC;
+    box-shadow: 0 0 0 0.15rem rgba(204, 204, 204, 0.25);
+}
+
+/* Optional: sesuaikan tombol "Choose file" bawaan di browser (webkit only) */
+body.dark .modal-body input[type="file"]::-webkit-file-upload-button {
+    background-color: #3A3B3C;
+    color: #CCC;
+    border: 1px solid #4D4C4C;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+body.dark .modal-body input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #4D4C4C;
+    color: #FFF;
+}
+
+/* ==============================
+   DARK MODE UNTUK SWEETALERT2
+============================== */
+body.dark .swal2-popup {
+    background-color: #2b2b2b !important;
+    color: #f1f1f1 !important;
+    border: 1px solid #4D4C4C;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+body.dark .swal2-title {
+    color: #f1f1f1 !important;
+}
+
+body.dark .swal2-html-container {
+    color: #dcdcdc !important;
+}
+
+body.dark .swal2-confirm {
+    background-color: #3A3B3C !important;
+    color: #fff !important;
+    border: 1px solid #4D4C4C !important;
+}
+
+body.dark .swal2-confirm:hover {
+    background-color: #4D4C4C !important;
+}
+
+body.dark .swal2-cancel {
+    background-color: #5a1e1e !important;
+    color: #fff !important;
+    border: 1px solid #4D4C4C !important;
+}
+
+body.dark .swal2-cancel:hover {
+    background-color: #7a2e2e !important;
+}
+
+body.dark .swal2-icon {
+    border-color: #999 !important;
+}
+
+body.dark .swal2-icon.swal2-success [class^='swal2-success-line'],
+body.dark .swal2-icon.swal2-success [class*=' swal2-success-line'] {
+    background-color: #4caf50 !important;
+}
+
+body.dark .swal2-icon.swal2-error {
+    border-color: #f44336 !important;
+    color: #f44336 !important;
+}
+
+body.dark .swal2-icon.swal2-warning {
+    border-color: #ff9800 !important;
+    color: #ff9800 !important;
+}

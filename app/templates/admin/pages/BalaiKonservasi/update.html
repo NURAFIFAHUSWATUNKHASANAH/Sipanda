@@ -1,0 +1,104 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+
+<div class="overview">
+    <div class="title">
+        <i class="uil uil-files-landscapes"></i>
+        <span class="text">Edit Data Balai Konservasi</span>
+    </div>
+</div>
+
+<div class="form-container">
+    <form action="{{ url_for('editbalai', id_balaikonservasi=balai.id_balaikonservasi) }}" method="POST"
+        enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="nama_balai">Nama Balai</label>
+            <input type="text" id="nama_balai" name="nama_balai" class="form-control" value="{{ balai.nama_balai }}"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="deskripsi">Deskripsi</label>
+            <textarea id="deskripsi" name="deskripsi" class="form-control" rows="4"
+                required>{{ balai.deskripsi }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="provinsi">Provinsi</label>
+            <input type="text" id="provinsi" name="provinsi" class="form-control" value="{{ balai.provinsi }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="alamat">Alamat</label>
+            <input type="text" id="alamat" name="alamat" class="form-control" value="{{ balai.alamat }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="latitude">Latitude</label>
+            <input type="text" id="latitude" name="latitude" class="form-control" value="{{ balai.latitude }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="longitude">Longitude</label>
+            <input type="text" id="longitude" name="longitude" class="form-control" value="{{ balai.longitude }}"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="call_center">Call Center</label>
+            <input type="text" id="call_center" name="call_center" class="form-control" value="{{ balai.call_center }}">
+        </div>
+
+        <div class="form-group">
+            <label for="gambarbalai">Gambar</label>
+            <input type="file" id="gambarbalai" name="gambarbalai" class="form-control">
+            {% if balai.gambarbalai %}
+            <div class="current-image">
+                <p>Gambar saat ini:</p>
+                <img src="{{ url_for('static', filename='gambarUser/' + balai.gambarbalai) }}"
+                    alt="{{ balai.nama_balai }}" style="max-width: 200px;">
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="add-data-btn">Simpan</button>
+            <a href="{{ url_for('balaiKonservasi') }}" class="btn btn-secondary">Batal</a>
+        </div>
+    </form>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="alert alert-{{ messages[0][0] }}">
+    {{ messages[0][1] }}
+</div>
+{% endif %}
+{% endwith %}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const latInput = document.getElementById('latitude');
+        const lonInput = document.getElementById('longitude');
+
+        function validateNumberInput(e) {
+            // Hanya izinkan angka, titik, dan minus (untuk koordinat negatif)
+            this.value = this.value.replace(/[^0-9.-]/g, '');
+        }
+
+        latInput.addEventListener('input', validateNumberInput);
+        lonInput.addEventListener('input', validateNumberInput);
+
+        // Opsional: validasi saat submit
+        const form = document.querySelector('.activity-form');
+        form.addEventListener('submit', function (e) {
+            if (latInput.value === '' || lonInput.value === '') {
+                e.preventDefault();
+                alert('Latitude dan Longitude harus diisi!');
+            }
+        });
+    });
+</script>
+{% endblock %}

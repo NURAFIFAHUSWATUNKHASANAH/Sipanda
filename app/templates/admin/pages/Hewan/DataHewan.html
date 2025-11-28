@@ -1,0 +1,559 @@
+{% extends "/admin/layout/index.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/datahewan.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<div class="hewan-container">
+    <div class="hewan-title">
+        <i class="uil uil-clock-three"></i>
+        <span>Kelola Data Hewan</span>
+    </div>
+
+    <!-- Tombol Tambah untuk membuka Halaman Tambah -->
+    <!-- <div class="hewan-button-container"> <a href="{{ url_for('tambahHewan') }}"> <button
+                class="hewan-add-btn">Tambah</button> </a> </div> -->
+
+    <!-- Tombol Tambah untuk membuka modal -->
+    <div class="hewan-button-container">
+        <button class="hewan-add-btn" data-toggle="modal" data-target="#tambahHewanModal">
+            Tambah
+        </button>
+    </div>
+
+    <!-- Wrapper agar tabel bisa scroll horizontal -->
+    <div class="table-responsive">
+        <table id="hewanTable" class="table table-hewan" data-toggle="table" data-toolbar="#toolbar" data-search="true"
+            data-show-columns="true" data-show-refresh="true" data-pagination="true"
+            data-page-list="[5, 10, 20, 50, 100]" data-show-export="true" data-export-types="['excel','csv','pdf']"
+            data-export-options='{"fileName": "data-hewan"}' data-pagination-pre-text="‹" data-pagination-next-text="›">
+            <thead class="thead-dark">
+                <tr>
+                    <th data-field="no" data-sortable="true">No</th>
+                    <th data-field="gambar">Gambar</th>
+                    <th data-field="nama" data-sortable="true">Nama Hewan</th>
+                    <th data-field="nama_latin" data-sortable="true">Nama Latin</th>
+                    <th data-field="kategori" data-sortable="true">Kategori</th>
+                    <th data-field="deskripsi" data-visible="false">Deskripsi</th>
+                    <th data-field="status">Status</th>
+                    <th data-field="populasi">Populasi</th>
+                    <th data-field="habitat">Habitat</th>
+                    <th data-field="ciri">Ciri-ciri</th>
+                    <th data-field="aksi">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hwns in hewans %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <a href="{{ url_for('static', filename='gambarUser/' + hwns.url_gambar) }}" target="_blank">
+                            <img src="{{ url_for('static', filename='gambarUser/' + hwns.url_gambar) }}"
+                                alt="Gambar Hewan" class="table-img">
+                        </a>
+                    </td>
+                    <td data-export-text="{{ hwns.nama }}">{{ hwns.nama }}</td>
+                    <td data-export-text="{{ hwns.nama_latin }}">{{ hwns.nama_latin }}</td>
+                    <td data-export-text="{{ hwns.kategori_nama }}">{{ hwns.kategori_nama }}</td>
+                    <td data-export-text="{{ hwns.deskripsi }}">{{ hwns.deskripsi[:40] }}...</td>
+                    <td data-export-text="{{ hwns.status }}">{{ hwns.status }}</td>
+                    <td data-export-text="{{ hwns.populasi }}">{{ hwns.populasi }}</td>
+                    <td data-export-text="{{ hwns.habitat }}">{{ hwns.habitat[:20] }}...</td>
+                    <td data-export-text="{{ hwns.ciri_full }}" title="{{ hwns.ciri_full }}">
+                        {{ hwns.ciri_short }}
+                    </td>
+                    <td>
+                        <div class="hewan-action-buttons">
+                            <!-- EDIT DENGAN HALAMAN EDIT updateHewan.html -->
+
+                            <!-- <a href="{{ url_for('editHewans', id_hewan=hwns.id_hewan) }}" class="hewan-btn-circle edit">
+                                <i class="fa fa-edit"></i>
+                            </a> -->
+
+                            <button class="hewan-btn-circle edit" data-id="{{ hwns.id_hewan }}"
+                                data-nama="{{ hwns.nama }}" data-nama_latin="{{ hwns.nama_latin }}"
+                                data-deskripsi="{{ hwns.deskripsi }}" data-status="{{ hwns.status }}"
+                                data-populasi="{{ hwns.populasi }}" data-habitat="{{ hwns.habitat }}"
+                                data-ciri='{{ (hwns.ciri_list or [])|tojson|safe }}'
+                                data-id_kategori="{{ hwns.id_kategori }}"
+                                data-gambar="{{ url_for('static', filename='gambarUser/' + hwns.url_gambar) }}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+
+                            <form action="{{ url_for('deleteHewan', id_hewan=hwns.id_hewan) }}" method="POST"
+                                class="delete-form d-inline">
+                                <button type="button" class="hewan-btn-circle delete" data-id="{{ hwns.id_hewan }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ========== MODAL TAMBAH DATA HEWAN ========== -->
+<div class="modal fade" id="tambahHewanModal" tabindex="-1" aria-labelledby="tambahHewanLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahHewanLabel">Tambah Data Hewan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formTambahHewan" enctype="multipart/form-data" method="POST"
+                    action="{{ url_for('tambahHewan') }}">
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input type="text" name="nama" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Latin</label>
+                        <input type="text" name="nama_latin" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <input type="text" name="status" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Populasi</label>
+                        <input type="number" name="populasi" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Habitat</label>
+                        <input type="text" name="habitat" class="form-control" required>
+                    </div>
+                    <div class="form-group" id="ciri-ciri-container">
+                        <label>Ciri-ciri</label>
+                        <input type="text" name="ciri_ciri[]" class="form-control mb-2"
+                            placeholder="Masukkan ciri-ciri">
+                    </div>
+                    <button type="button" id="add-ciri" class="btn btn-secondary btn-sm mb-3">Tambah Ciri-ciri</button>
+                    <div class="form-group">
+                        <label for="id_kategori">Kategori</label>
+                        <select class="form-control" id="id_kategori" name="id_kategori" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            {% for kategori in kategoris %}
+                            <option value="{{ kategori.id_kategori }}">{{ kategori.nama_kategori }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="url_gambar" accept="image/*" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL EDIT DATA HEWAN ========== -->
+<div class="modal fade" id="editHewanModal" tabindex="-1" aria-labelledby="editHewanLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editHewanLabel">Edit Data Hewan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditHewan" enctype="multipart/form-data">
+                    <input type="hidden" name="id_hewan" id="edit_id_hewan">
+
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input type="text" name="nama" id="edit_nama" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama Latin</label>
+                        <input type="text" name="nama_latin" id="edit_nama_latin" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi" id="edit_deskripsi" class="form-control" rows="2"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <input type="text" name="status" id="edit_status" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Populasi</label>
+                        <input type="number" name="populasi" id="edit_populasi" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Habitat</label>
+                        <input type="text" name="habitat" id="edit_habitat" class="form-control" required>
+                    </div>
+
+                    <div class="form-group" id="edit-ciri-ciri-container">
+                        <label>Ciri-ciri</label>
+                        <input type="text" name="ciri_ciri[]" class="form-control mb-2 edit-ciri"
+                            placeholder="Masukkan ciri-ciri">
+                    </div>
+
+                    <button type="button" id="edit-add-ciri" class="btn btn-secondary btn-sm mb-3">Tambah
+                        Ciri-ciri</button>
+
+                    <div class="form-group">
+                        <label for="edit_id_kategori">Kategori</label>
+                        <select class="form-control" id="edit_id_kategori" name="id_kategori" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            {% for kategori in kategoris %}
+                            <option value="{{ kategori.id_kategori }}">{{ kategori.nama_kategori }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gambar (Kosongkan jika tidak ingin diubah)</label>
+                        <input type="file" name="url_gambar" id="edit_gambar" accept="image/*" class="form-control">
+                        <img id="edit_preview_gambar" src="" alt="Preview Gambar" class="img-thumbnail mt-2"
+                            style="max-height: 150px; display:none;">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#add-ciri').click(function () {
+            $('#ciri-ciri-container').append('<input type="text" name="ciri_ciri[]" class="form-control mb-2" placeholder="Masukkan ciri-ciri">');
+        });
+
+        $(document).on('click', '.delete', function (e) {
+            e.preventDefault();
+            const form = $(this).closest('.delete-form');
+            const actionUrl = form.attr('action');
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Kirim AJAX request untuk hapus data
+                    $.ajax({
+                        url: actionUrl,
+                        type: 'POST',
+                        success: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data hewan berhasil dihapus.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: 'Terjadi kesalahan saat menghapus data.',
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    // Excel / CSV dengan teks lengkap
+    $('.export').click(function () {
+        var type = $(this).data('type');
+        var $table = $('#hewanTable');
+
+        $table.find('tbody tr').each(function () {
+            $(this).find('td').each(function () {
+                var exportText = $(this).attr('data-export-text');
+                if (exportText !== undefined) {
+                    $(this).attr('data-original-text', $(this).html());
+                    $(this).text(exportText);
+                }
+            });
+        });
+
+        $table.tableExport({ type: type, fileName: 'data-hewan' });
+
+        // Kembalikan isi tabel
+        $table.find('tbody tr').each(function () {
+            $(this).find('td').each(function () {
+                var originalText = $(this).attr('data-original-text');
+                if (originalText !== undefined) {
+                    $(this).html(originalText);
+                    $(this).removeAttr('data-original-text');
+                }
+            });
+        });
+    });
+
+    // PDF Export pakai jsPDF + autotable
+    function exportPDF() {
+        var doc = new jsPDF('p', 'pt', 'a4');
+        var rows = [];
+        $('#hewanTable tbody tr').each(function () {
+            var row = [];
+            $(this).find('td').each(function () {
+                var exportText = $(this).attr('data-export-text');
+                if (exportText !== undefined) {
+                    row.push(exportText);
+                } else {
+                    row.push($(this).text());
+                }
+            });
+            rows.push(row);
+        });
+
+        // Ambil header
+        var columns = [];
+        $('#hewanTable thead th').each(function () {
+            columns.push($(this).text());
+        });
+
+        doc.autoTable({
+            head: [columns],
+            body: rows,
+            startY: 20,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [41, 128, 185], textColor: 255 }
+        });
+
+        doc.save('data-hewan.pdf');
+    }
+
+    // Tambahan untuk responsive export PDF: teks panjang tetap tampil lengkap
+    function exportPDFResponsive() {
+        var doc = new jsPDF('p', 'pt', 'a4');
+        var rows = [];
+        $('#hewanTable tbody tr').each(function () {
+            var row = [];
+            $(this).find('td').each(function () {
+                var exportText = $(this).attr('data-export-text');
+                if (exportText !== undefined) {
+                    // Pisahkan teks panjang menjadi beberapa baris jika terlalu panjang
+                    var maxChar = 50;
+                    var splitted = exportText.match(new RegExp('.{1,' + maxChar + '}', 'g'));
+                    row.push(splitted.join('\n'));
+                } else {
+                    row.push($(this).text());
+                }
+            });
+            rows.push(row);
+        });
+
+        var columns = [];
+        $('#hewanTable thead th').each(function () {
+            columns.push($(this).text());
+        });
+
+        doc.autoTable({
+            head: [columns],
+            body: rows,
+            startY: 20,
+            styles: { fontSize: 10, cellWidth: 'wrap' },
+            headStyles: { fillColor: [41, 128, 185], textColor: 255 }
+        });
+
+        doc.save('data-hewan.pdf');
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#formTambahHewan').on('submit', function (e) {
+            e.preventDefault();
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $(this).attr('action'), // URL diambil dari atribut action form
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#tambahHewanModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data hewan berhasil ditambahkan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan saat menambahkan data.'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        // Tombol tambah ciri di modal edit
+        $('#edit-add-ciri').click(function () {
+            $('#edit-ciri-ciri-container').append(
+                '<input type="text" name="ciri_ciri[]" class="form-control mb-2 edit-ciri" placeholder="Masukkan ciri-ciri">'
+            );
+        });
+
+        $(document).on('click', '.edit', function () {
+            var btn = $(this);
+
+            // Ambil data dasar
+            $('#edit_id_hewan').val(btn.data('id'));
+            $('#edit_nama').val(btn.data('nama'));
+            $('#edit_nama_latin').val(btn.data('nama_latin'));
+            $('#edit_deskripsi').val(btn.data('deskripsi'));
+            $('#edit_status').val(btn.data('status'));
+            $('#edit_populasi').val(btn.data('populasi'));
+            $('#edit_habitat').val(btn.data('habitat'));
+            $('#edit_id_kategori').val(btn.data('id_kategori'));
+
+            // Preview gambar
+            var gambar = btn.data('gambar');
+            if (gambar) {
+                $('#edit_preview_gambar').attr('src', gambar).show();
+            } else {
+                $('#edit_preview_gambar').hide();
+            }
+
+            // Hapus hanya input lama (bukan label)
+            $('#edit-ciri-ciri-container').find('input').remove();
+
+            // Ambil ciri dari tombol
+            var ciriList = btn.attr('data-ciri');
+            try {
+                ciriList = JSON.parse(ciriList);
+            } catch (e) {
+                ciriList = [];
+            }
+
+            // Tambahkan input ciri baru
+            if (Array.isArray(ciriList) && ciriList.length > 0) {
+                ciriList.forEach(function (ciri) {
+                    $('#edit-ciri-ciri-container').append(
+                        `<input type="text" name="ciri_ciri[]" class="form-control mb-2 edit-ciri" value="${ciri}">`
+                    );
+                });
+            } else {
+                $('#edit-ciri-ciri-container').append(
+                    `<input type="text" name="ciri_ciri[]" class="form-control mb-2 edit-ciri" placeholder="Masukkan ciri-ciri">`
+                );
+            }
+            // Tampilkan modal edit
+            $('#editHewanModal').modal('show');
+        });
+
+        // Preview langsung saat user memilih gambar baru di input edit
+        $('#edit_gambar').on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#edit_preview_gambar')
+                        .attr('src', e.target.result)
+                        .show(); // tampilkan preview
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $('#edit_preview_gambar').hide(); // sembunyikan jika tidak ada file
+            }
+        });
+
+        // Submit form edit via AJAX
+        $('#formEditHewan').on('submit', function (e) {
+            e.preventDefault();
+            var id_hewan = $('#edit_id_hewan').val();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '/admin/hewan/edit/' + id_hewan,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#editHewanModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data hewan berhasil diperbarui.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                },
+                error: function () {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan saat menyimpan data.', 'error');
+                }
+            });
+        });
+    });
+
+    // Pastikan tombol "Batal" dan "X" benar-benar bisa menutup modal edit
+    $(document).on('click', '#editHewanModal [data-dismiss="modal"], #editHewanModal .close', function () {
+        $('#editHewanModal').modal('hide');
+    });
+
+    // Tambahan: pastikan body gak ke-freeze setelah modal ditutup
+    $('#editHewanModal').on('hidden.bs.modal', function () {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    });
+</script>
+
+
+{% endblock %}

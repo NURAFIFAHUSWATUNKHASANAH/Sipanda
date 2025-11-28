@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css')}}" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Leaflet Geocoder CSS -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/favicon.ico') }}">
+
+    <!-- <link rel=”icon” type=”image/png” href=”{{ url_for('static', filename='image/favicon.io') }}”> -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+    {% block styles %}{% endblock %}
+    <title>Home</title>
+</head>
+<body>
+    {% include 'Widget/navbar.html'%}
+    {% block content %}{% endblock %}
+    <div class="container">
+        <div class="chatbox">
+            <div class="chatbox__support">
+                <div class="chatbox__header">
+                    <div class="chatbox__image--header">
+                        <img src="{{ url_for('static', filename='image/pandas.png') }}" alt="Panda">
+                    </div>
+                    <div class="chatbox__content--header">
+                        <h4 class="chatbox__heading--header">Panda Go</h4>
+                        <p class="chatbox__description--header">Hi. Ada yang bisa saya bantu?</p>
+                    </div>
+                </div>
+                <div class="chatbox__messages chat-messages">
+                    <!-- Pesan akan ditambahkan di sini -->
+                </div>
+                <div class="chatbox__footer">
+                    <input id="user-input" type="text" placeholder="Tulis pesan...">
+                    <button id="send-btn" class="chatbox__send--footer">Kirim</button>
+                </div>
+            </div>
+            <div class="chatbox__button">
+                <button><img src="{{ url_for('static', filename='image/Frame.png') }}" alt="Button"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet Map JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Leaflet Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="{{url_for('static', filename='js/layout.js')}}"></script>
+
+    {% block scripts %}{% endblock %}
+    {% include 'Widget/footer.html'%}
+</body>
+</html>
